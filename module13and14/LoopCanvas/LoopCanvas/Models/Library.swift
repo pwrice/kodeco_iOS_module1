@@ -26,36 +26,27 @@ class Category: ObservableObject, Identifiable {
   }
 }
 
-class Library: ObservableObject {
+class Library: ObservableObject, Codable {
   @Published var allBlocks: [Block]
-  @Published var librarySlotLocations: [CGPoint]
   @Published var libaryFrame: CGRect
   @Published var currentCategory: Category?
   @Published var categories: [Category] = []
-
+  var name: String
+  var tempo: Double = 80.0 // TODO - set this dynamically from a library JSON file
 
   let maxCategories = 7
 
   let samplesDirectory = "Samples/"
 
   init() {
+    name = ""
     self.allBlocks = []
 
-    self.librarySlotLocations = [
-      CGPoint(x: 50, y: 150),
-      CGPoint(x: 150, y: 150),
-      CGPoint(x: 250, y: 150),
-      CGPoint(x: 350, y: 150),
-      CGPoint(x: 50, y: 250),
-      CGPoint(x: 150, y: 250),
-      CGPoint(x: 250, y: 250),
-      CGPoint(x: 350, y: 250)
-    ]
     // this will be reset by the geometry reader
     self.libaryFrame = CGRect(x: 0, y: 800, width: 400, height: 200)
   }
 
-  func syncBlockLocationsWithSlots() {
+  func syncBlockLocationsWithSlots(librarySlotLocations: [CGPoint]) {
     for (index, location) in librarySlotLocations.enumerated() where index < allBlocks.count {
       allBlocks[index].location = location
     }
@@ -95,6 +86,7 @@ class Library: ObservableObject {
   }
 
   func loadLibraryFrom(libraryFolderName: String) {
+    name = libraryFolderName
     let fileManager = FileManager.default
     let libraryDirectoryURL = URL(
       fileURLWithPath: samplesDirectory + libraryFolderName,
@@ -115,10 +107,11 @@ class Library: ObservableObject {
         for (sampleInd, sampleFile) in sampleFiles.enumerated() {
           let block = Block(
             id: Block.getNextBlockId(),
-            location: CGPoint(x: 0, y: 0),
+            location: CGPoint(x: 100, y: 100),
             color: categoryColor,
             icon: cateogryIcons[sampleInd % cateogryIcons.count],
             loopURL: URL(fileURLWithPath: sampleFile, relativeTo: categoryDirectoryURL),
+            relativePath: libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
             isLibraryBlock: true)
           blocks.append(block)
         }
@@ -133,5 +126,24 @@ class Library: ObservableObject {
 
   func removeBlock(block: Block) {
     allBlocks.removeAll { $0.id == block.id }
+  }
+
+  // Codable implementation
+
+  enum CodingKeys: String, CodingKey {
+    case id,
+      name
+  }
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    name = try container.decode(String.self, forKey: .name)
+    self.allBlocks = []
+    self.libaryFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(name, forKey: .name)
   }
 }

@@ -16,7 +16,7 @@ final class CanvasViewModelTests: XCTestCase {
     musicEngine = MockMusicEngine()
     canvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine)
     canvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
-    canvasViewModel.canvasModel.library.syncBlockLocationsWithSlots()
+    canvasViewModel.syncBlockLocationsWithSlots()
     canvasViewModel.updateAllBlocksList()
   }
 
@@ -66,6 +66,8 @@ final class CanvasViewModelTests: XCTestCase {
     XCTAssertEqual(firstBlock.color, blockToDrag.color)
     XCTAssertEqual(firstBlock.loopURL, blockToDrag.loopURL)
     XCTAssertFalse(firstBlock.isLibraryBlock)
+    XCTAssertEqual(firstBlock.relativePath, blockToDrag.relativePath)
+    XCTAssertEqual(firstBlock.icon, blockToDrag.icon)
 
     // The new block is setup properly
     XCTAssertEqual(firstBlock.blockGroupGridPosX, 0)
@@ -354,6 +356,45 @@ final class CanvasViewModelTests: XCTestCase {
     XCTAssertFalse(canvasViewModel.allBlocks.contains(firstBlock))
   }
 
+  func testSaveAndLoadSong() throws {
+    // Drop two blocks on canvas and connect them
+    let origFirstBlock = try dropLibraryBlockOnCanvas(libraryBlockIndex: 0, location: CGPoint(x: 200, y: 400))
+    let origSecondBlock = try dropLibraryBlockOnCanvas(
+      libraryBlockIndex: 1,
+      location: CGPoint(
+        x: origFirstBlock.location.x + 20,
+        y: origFirstBlock.location.y + CanvasViewModel.blockSize + 20))
+
+    // We have one block group
+    XCTAssertEqual(canvasViewModel.canvasModel.blocksGroups.count, 1)
+    let origBlockGroup = try XCTUnwrap(canvasViewModel.canvasModel.blocksGroups.first)
+    XCTAssertEqual(origBlockGroup.allBlocks.count, 2)
+    XCTAssertTrue(origBlockGroup.allBlocks.contains(origFirstBlock))
+    XCTAssertTrue(origBlockGroup.allBlocks.contains(origSecondBlock))
+
+    canvasViewModel.saveSong()
+
+    // Create a new canvas view model with an empty canvas
+    let newCanvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine)
+    newCanvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
+    newCanvasViewModel.syncBlockLocationsWithSlots()
+    newCanvasViewModel.updateAllBlocksList()
+    XCTAssertEqual(newCanvasViewModel.canvasModel.blocksGroups.count, 0)
+
+    newCanvasViewModel.loadSong()
+
+    XCTAssertEqual(newCanvasViewModel.canvasModel.blocksGroups.count, 1)
+    let newBlockGroup = try XCTUnwrap(canvasViewModel.canvasModel.blocksGroups.first)
+    XCTAssertEqual(newBlockGroup.id, origBlockGroup.id)
+    XCTAssertEqual(newBlockGroup.allBlocks.count, origBlockGroup.allBlocks.count)
+    let newFirstBlock = try XCTUnwrap(newBlockGroup.allBlocks.first { $0.id == origFirstBlock.id })
+    XCTAssertNotNil(newBlockGroup.allBlocks.first { $0.id == origSecondBlock.id })
+    XCTAssertEqual(newFirstBlock.color, origFirstBlock.color)
+    XCTAssertEqual(newFirstBlock.relativePath, origFirstBlock.relativePath)
+    XCTAssertEqual(newFirstBlock.blockGroupGridPosX, origFirstBlock.blockGroupGridPosX)
+    XCTAssertEqual(newFirstBlock.blockGroupGridPosY, origFirstBlock.blockGroupGridPosY)
+    XCTAssertEqual(newFirstBlock.location, origFirstBlock.location)
+  }
 
   func dropLibraryBlockOnCanvas(libraryBlockIndex: Int, location: CGPoint) throws -> Block {
     let libraryBlock = try XCTUnwrap(canvasViewModel.canvasModel.library.allBlocks[libraryBlockIndex])

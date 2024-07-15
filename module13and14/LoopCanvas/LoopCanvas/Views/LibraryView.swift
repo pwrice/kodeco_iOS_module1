@@ -33,18 +33,18 @@ struct LibraryView: View {
       }
       HStack(spacing: CanvasViewModel.blockSpacing) {
         Spacer()
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 0)
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 1)
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 2)
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 3)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 0)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 1)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 2)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 3)
         Spacer()
       }
       HStack(spacing: CanvasViewModel.blockSpacing) {
         Spacer()
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 4)
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 5)
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 6)
-        LibrarySlotView(librarySlotLocations: $viewModel.canvasModel.library.librarySlotLocations, index: 7)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 4)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 5)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 6)
+        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 7)
         Spacer()
       }
     }

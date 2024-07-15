@@ -14,6 +14,7 @@ class CanvasViewModel: ObservableObject {
   @Published var allBlocks: [Block]
   @Published var libraryBlocks: [Block]
   @Published var selectedCategoryName: String = ""
+  @Published var librarySlotLocations: [CGPoint]
 
   var draggingBlock: Block?
   var canvasScrollOffset = CGPoint(x: 0, y: 0)
@@ -23,8 +24,18 @@ class CanvasViewModel: ObservableObject {
   static let canvasWidth: CGFloat = 1000.0
   static let canvasHeight: CGFloat = 1000.0
 
-
   init(canvasModel: CanvasModel, musicEngine: MusicEngine) {
+    self.librarySlotLocations = [
+      CGPoint(x: 50, y: 150),
+      CGPoint(x: 150, y: 150),
+      CGPoint(x: 250, y: 150),
+      CGPoint(x: 350, y: 150),
+      CGPoint(x: 50, y: 250),
+      CGPoint(x: 150, y: 250),
+      CGPoint(x: 250, y: 250),
+      CGPoint(x: 350, y: 250)
+    ]
+
     self.musicEngine = musicEngine
     self.canvasModel = canvasModel
     self.allBlocks = []
@@ -35,6 +46,28 @@ class CanvasViewModel: ObservableObject {
     self.updateAllBlocksList()
   }
 
+  func resetCanvasModel(newCanvasModel: CanvasModel) {
+    musicEngine.stop()
+    canvasModel.cleanup()
+
+    canvasModel = newCanvasModel
+    canvasModel.library.loadLibraryFrom(libraryFolderName: canvasModel.library.name)
+    canvasModel.library.syncBlockLocationsWithSlots(librarySlotLocations: librarySlotLocations)
+    for libraryBlock in canvasModel.library.allBlocks {
+      libraryBlock.visible = true
+    }
+
+    allBlocks = []
+    libraryBlocks = []
+    updateAllBlocksList()
+    canvasModel.setMusicEngineAfterLoad(musicEngine: musicEngine)
+    musicEngine.play()
+  }
+}
+
+// Events from views
+
+extension CanvasViewModel {
   func onViewAppear() {
     canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
     selectedCategoryName = canvasModel.library.currentCategory?.name ?? ""
@@ -48,11 +81,15 @@ class CanvasViewModel: ObservableObject {
   }
 
   func libraryBlockLocationsUpdated() {
-    canvasModel.library.syncBlockLocationsWithSlots()
+    syncBlockLocationsWithSlots()
     for libraryBlock in canvasModel.library.allBlocks {
       libraryBlock.visible = true
     }
     updateAllBlocksList()
+  }
+
+  func syncBlockLocationsWithSlots() {
+    canvasModel.library.syncBlockLocationsWithSlots(librarySlotLocations: librarySlotLocations)
   }
 
   func updateBlockDragLocation(block: Block, location: CGPoint) {
@@ -87,12 +124,12 @@ class CanvasViewModel: ObservableObject {
         color: block.color,
         icon: block.icon,
         visible: true,
-        loopURL: block.loopURL
+        loopURL: block.loopURL,
+        relativePath: block.relativePath
       )
 
-      canvasModel.library.syncBlockLocationsWithSlots() // reset library block location      
+      syncBlockLocationsWithSlots() // reset library block location
     }
-
 
     let blockAddedToGroup = canvasModel.checkBlockPositionAndAddToAvailableGroup(block: blockDroppedOnCanvas)
 
@@ -115,9 +152,55 @@ class CanvasViewModel: ObservableObject {
   func selectLoopCategory(categoryName: String) {
     canvasModel.library.setLoopCategory(categoryName: categoryName)
     updateAllBlocksList()
-    canvasModel.library.syncBlockLocationsWithSlots()
+    syncBlockLocationsWithSlots()
   }
 
+  func clearCanvas() {
+    canvasModel.clear()
+    updateAllBlocksList()
+  }
+
+  func saveSong() {
+    let documentDirectoryURL = URL(
+      fileURLWithPath: "testSong",
+      relativeTo: URL.documentsDirectory)
+      .appendingPathExtension("json")
+
+    let encoder = JSONEncoder()
+    do {
+      let canvasJSONData = try encoder.encode(canvasModel)
+      try canvasJSONData.write(to: documentDirectoryURL, options: .atomicWrite)
+      print("writing song to \(documentDirectoryURL)")
+    } catch {
+      // TODO proper error handling
+      print("Error saving file \(documentDirectoryURL)")
+    }
+  }
+
+  func loadSong() {
+    let documentDirectoryURL = URL(
+      fileURLWithPath: "testSong",
+      relativeTo: URL.documentsDirectory)
+      .appendingPathExtension("json")
+
+    let decoder = JSONDecoder()
+    do {
+      let canvasJSONData = try Data(contentsOf: documentDirectoryURL)
+      let canvasModel = try decoder.decode(CanvasModel.self, from: canvasJSONData)
+
+      resetCanvasModel(newCanvasModel: canvasModel)
+
+    } catch {
+      // TODO proper error handling
+      print("Error loading file \(documentDirectoryURL)")
+    }
+  }
+}
+
+
+// Internal State Managment
+
+extension CanvasViewModel {
   func updateAllBlocksList() {
     var newAllBlocksList = canvasModel.blocksGroups.flatMap { $0.allBlocks }
     + [draggingBlock].compactMap { $0 }

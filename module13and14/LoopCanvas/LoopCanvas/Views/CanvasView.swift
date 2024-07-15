@@ -12,39 +12,55 @@ struct CanvasView: View {
   @StateObject var viewModel: CanvasViewModel
 
   var body: some View {
-    ZStack {
-      ScrollView([.horizontal, .vertical]) {
-        ZStack {
-          BackgroundDots()
+    NavigationView {
+      ZStack {
+        ScrollView([.horizontal, .vertical]) {
+          ZStack {
+            BackgroundDots()
 
-          CanvasBlocksView(viewModel: viewModel)
+            CanvasBlocksView(viewModel: viewModel)
 
-          GeometryReader { proxy in
-            let xOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minX
-            let yOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minY
-            // This prefernces method to calculate the scroll offset
-            // seems a bit hacky. Is there a better way?
-            Color.clear.preference(
-              key: ViewOffsetKey.self,
-              value: CGPoint(x: xOffset, y: yOffset))
+            GeometryReader { proxy in
+              let xOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minX
+              let yOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minY
+              // This prefernces method to calculate the scroll offset
+              // seems a bit hacky. Is there a better way?
+              Color.clear.preference(
+                key: ViewOffsetKey.self,
+                value: CGPoint(x: xOffset, y: yOffset))
+            }
           }
+          .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)
         }
-        .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)
-      }
-      .defaultScrollAnchor(.center)
-      .coordinateSpace(name: "CanvasCoordinateSpace")
-      .onPreferenceChange(ViewOffsetKey.self) {
-        viewModel.canvasScrollOffset = $0
-      }
+        .defaultScrollAnchor(.center)
+        .coordinateSpace(name: "CanvasCoordinateSpace")
+        .onPreferenceChange(ViewOffsetKey.self) {
+          viewModel.canvasScrollOffset = $0
+        }
 
-      UIOverlayView(viewModel: viewModel)
+        UIOverlayView(viewModel: viewModel)
 
-      LibraryBlocksView(viewModel: viewModel)
+        LibraryBlocksView(viewModel: viewModel)
+      }
+      .coordinateSpace(name: "ViewportCoorindateSpace")
+      .onAppear {
+        viewModel.onViewAppear()
+      }
     }
-    .coordinateSpace(name: "ViewportCoorindateSpace")
-    .onAppear {
-      viewModel.onViewAppear()
-    }
+    .navigationBarItems(
+      trailing: Menu {
+        Button("Save") {
+          viewModel.saveSong()
+        }
+        Button("Load") {
+          viewModel.loadSong()
+        }
+        Button("Clear Canvas") {
+          viewModel.clearCanvas()
+        }
+    } label: {
+      Image(systemName: "ellipsis.circle")
+      })
   }
 }
 

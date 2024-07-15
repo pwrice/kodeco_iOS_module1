@@ -80,13 +80,89 @@ final class BlockGroupTests: XCTestCase {
     XCTAssertEqual(secondBlock.loopPlayer?.loopPlaying, true)
   }
 
-  func getTestBlock(id: Int, location: CGPoint) -> Block {
-    return Block(
-      id: id,
+  func testEncodeBlockToJSON() throws {
+    let testBlock = getTestBlock(
+      id: 0,
       location: CGPoint(x: 0, y: 0),
+      blockGroupGridPosX: 0,
+      blockGroupGridPosY: 0
+    )
+
+    let encoder = JSONEncoder()
+    let blockJSONData = try encoder.encode(testBlock)
+
+    let decoder = JSONDecoder()
+    let decodedTestBlock = try decoder.decode(Block.self, from: blockJSONData)
+
+    XCTAssertEqual(decodedTestBlock.id, testBlock.id)
+    XCTAssertEqual(decodedTestBlock.location, testBlock.location)
+    XCTAssertEqual(decodedTestBlock.color, testBlock.color)
+    XCTAssertEqual(decodedTestBlock.icon, testBlock.icon)
+    XCTAssertEqual(decodedTestBlock.relativePath, testBlock.relativePath)
+    XCTAssertEqual(decodedTestBlock.loopURL, decodedTestBlock.loopURL)
+    XCTAssertEqual(decodedTestBlock.blockGroupGridPosX, testBlock.blockGroupGridPosX)
+    XCTAssertEqual(decodedTestBlock.blockGroupGridPosY, testBlock.blockGroupGridPosY)
+    XCTAssertEqual(decodedTestBlock.normalColor, testBlock.normalColor)
+    XCTAssertEqual(decodedTestBlock.visible, true)
+    XCTAssertEqual(decodedTestBlock.isLibraryBlock, false)
+  }
+
+  func testEncodeBlockGroupToJSON() throws {
+    let firstBlock = getTestBlock(
+      id: 0,
+      location: CGPoint(x: 0, y: 0),
+      blockGroupGridPosX: 0,
+      blockGroupGridPosY: 0
+    )
+
+    let blockGroup = BlockGroup(id: 0, block: firstBlock, musicEngine: musicEngine)
+
+    let rightSlot = SlotPostion.right.getSlot(relativeTo: firstBlock)
+    let secondBlock = getTestBlock(
+      id: 1,
+      location: rightSlot.location,
+      blockGroupGridPosX: 0,
+      blockGroupGridPosY: 0
+    )
+
+    blockGroup.addBlock(block: secondBlock, gridPosX: rightSlot.gridPosX, gridPosY: rightSlot.gridPosY)
+
+    let encoder = JSONEncoder()
+    let blockGroupJSONData = try encoder.encode(blockGroup)
+
+    let decoder = JSONDecoder()
+    let decodedBlockGroup = try decoder.decode(BlockGroup.self, from: blockGroupJSONData)
+
+    XCTAssertEqual(decodedBlockGroup.id, blockGroup.id)
+    XCTAssertEqual(decodedBlockGroup.allBlocks.count, blockGroup.allBlocks.count)
+
+    for (ind, decodedBlock) in decodedBlockGroup.allBlocks.enumerated() {
+      let origBlock = blockGroup.allBlocks[ind]
+      XCTAssertEqual(decodedBlock.id, origBlock.id)
+      XCTAssertEqual(decodedBlock.location, origBlock.location)
+      XCTAssertEqual(decodedBlock.color, origBlock.color)
+      XCTAssertEqual(decodedBlock.icon, origBlock.icon)
+      XCTAssertEqual(decodedBlock.relativePath, origBlock.relativePath)
+      XCTAssertEqual(decodedBlock.loopURL, origBlock.loopURL)
+      XCTAssertEqual(decodedBlock.blockGroupGridPosX, origBlock.blockGroupGridPosX)
+      XCTAssertEqual(decodedBlock.blockGroupGridPosY, origBlock.blockGroupGridPosY)
+      XCTAssertEqual(decodedBlock.normalColor, origBlock.normalColor)
+      XCTAssertEqual(decodedBlock.visible, true)
+      XCTAssertEqual(decodedBlock.isLibraryBlock, false)
+    }
+  }
+
+  func getTestBlock(id: Int, location: CGPoint, blockGroupGridPosX: Int? = nil, blockGroupGridPosY: Int? = nil) -> Block {
+    let block = Block(
+      id: id,
+      location: location,
       color: .pink,
       icon: "circle",
-      loopURL: URL(fileURLWithPath: "TEST_FILE.wav", relativeTo: Bundle.main.bundleURL)
+      loopURL: URL(fileURLWithPath: "Samples/DubSet/Horns/horns-5.wav", relativeTo: Bundle.main.bundleURL),
+      relativePath: "Samples/DubSet/Horns/horns-5.wav"
     )
+    block.blockGroupGridPosX = blockGroupGridPosX
+    block.blockGroupGridPosY = blockGroupGridPosY
+    return block
   }
 }

@@ -57,7 +57,7 @@ struct BlockGroupSlot {
   let location: CGPoint
 }
 
-class BlockGroup: ObservableObject, Identifiable {
+class BlockGroup: ObservableObject, Identifiable, Codable {
   var musicEngine: MusicEngine?
 
   let id: Int
@@ -80,6 +80,15 @@ class BlockGroup: ObservableObject, Identifiable {
     id = 0
   }
 
+  func cleanup() {
+    for block in allBlocks {
+      if let loopPlayer = block.loopPlayer {
+        musicEngine?.releaseLoopPlayer(player: loopPlayer)
+      }
+    }
+    musicEngine = nil
+  }
+
   init(id: Int, block: Block, musicEngine: MusicEngine? = nil) {
     self.id = id
     self.musicEngine = musicEngine
@@ -93,6 +102,13 @@ class BlockGroup: ObservableObject, Identifiable {
     allBlocks.append(block)
   }
 
+  func setMusicEngineAfterLoad(musicEngine: MusicEngine) {
+    self.musicEngine = musicEngine
+    for block in allBlocks where block.loopPlayer == nil {
+      block.loopPlayer = musicEngine.getAvailableLoopPlayer(loopURL: block.loopURL)
+    }
+  }
+
   func addBlock(block: Block, gridPosX: Int, gridPosY: Int) {
     block.blockGroupGridPosX = gridPosX
     block.blockGroupGridPosY = gridPosY
@@ -104,14 +120,26 @@ class BlockGroup: ObservableObject, Identifiable {
 
   func removeBlock(block: Block) {
     allBlocks.removeAll { $0.id == block.id }
+    cleanUpBlock(block: block)
+  }
+
+  func cleanUpBlock(block: Block) {
     block.blockGroupGridPosX = nil
     block.blockGroupGridPosY = nil
     block.blockGroup = nil
     if let loopPlayer = block.loopPlayer {
       musicEngine?.releaseLoopPlayer(player: loopPlayer)
+      block.loopPlayer = nil
     }
     block.loopPlayer = nil
     block.isPlaying = false
+  }
+
+  func removeAllBlocks() {
+    for block in allBlocks {
+      cleanUpBlock(block: block)
+    }
+    allBlocks = []
   }
 
   func getNextPlayPos() -> Int {
@@ -176,5 +204,30 @@ class BlockGroup: ObservableObject, Identifiable {
     for block in allBlocks {
       block.tick(step16: step16)
     }
+  }
+
+  // Codable implementation
+
+  enum CodingKeys: String, CodingKey {
+    case id,
+      allBlocks
+  }
+
+  required init(from decoder: Decoder) throws {
+    do {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+      id = try container.decode(Int.self, forKey: .id)
+      allBlocks = try container.decode([Block].self, forKey: .allBlocks)
+      currentPlayPosX = 0
+    } catch {
+      print("BlockGroup decode error \(error)")
+      throw error
+    }
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(id, forKey: .id)
+    try container.encode(allBlocks, forKey: .allBlocks)
   }
 }

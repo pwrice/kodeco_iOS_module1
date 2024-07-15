@@ -8,12 +8,11 @@
 import Foundation
 import SwiftUI
 
-class CanvasModel: ObservableObject {
+class CanvasModel: ObservableObject, Codable {
   var musicEngine: MusicEngine?
 
   @Published var blocksGroups: [BlockGroup] = []
   @Published var library = Library()
-
 
   init() {
   }
@@ -23,6 +22,31 @@ class CanvasModel: ObservableObject {
     musicEngine.delegate = self
   }
 
+  func cleanup() {
+    for blockGroup in blocksGroups {
+      blockGroup.cleanup()
+    }
+    musicEngine?.stop()
+    musicEngine?.delegate = nil
+    musicEngine = nil
+  }
+
+  func setMusicEngineAfterLoad(musicEngine: MusicEngine) {
+    self.musicEngine = musicEngine
+    musicEngine.delegate = self
+    for blockGroup in blocksGroups {
+      blockGroup.setMusicEngineAfterLoad(musicEngine: musicEngine)
+    }
+    musicEngine.tempo = library.tempo
+  }
+
+  func clear() {
+    for blockGroup in blocksGroups {
+      blockGroup.removeAllBlocks()
+    }
+
+    blocksGroups = []
+  }
 
   func addBlockGroup(initialBlock: Block) {
     let newBlockGroup = BlockGroup(id: BlockGroup.getNextBlockGroupId(), block: initialBlock, musicEngine: musicEngine)
@@ -106,6 +130,30 @@ class CanvasModel: ObservableObject {
     }
 
     return false
+  }
+
+  // Codable implementation
+
+  enum CodingKeys: String, CodingKey {
+    case blocksGroups
+    case library
+  }
+
+  required init(from decoder: Decoder) throws {
+    do {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+      blocksGroups = try container.decode([BlockGroup].self, forKey: .blocksGroups)
+      library = try container.decode(Library.self, forKey: .library)
+    } catch {
+      print("CanvasModel decode error \(error)")
+      throw error
+    }
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(blocksGroups, forKey: .blocksGroups)
+    try container.encode(library, forKey: .library)
   }
 }
 

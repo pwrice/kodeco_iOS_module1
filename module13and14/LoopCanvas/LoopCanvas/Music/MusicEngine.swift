@@ -14,11 +14,13 @@ import AVFoundation
 protocol MusicEngine: AnyObject {
   var nextBarLogicTick: Int { get set }
   var delegate: MusicEngineDelegate? { get set }
+  var tempo: Double { get set }
 
   init()
   func initializeEngine()
   func play()
   func stop()
+  func reset()
   func stopEngine()
   func getAvailableLoopPlayer(loopURL: URL?) -> LoopPlayer?
   func releaseLoopPlayer(player: LoopPlayer)
@@ -187,6 +189,10 @@ class AudioKitMusicEngine: BaseMusicEngine, MusicEngine {
     }
   }
 
+  func reset() {
+    sequencer.rewind()
+  }
+
   func play() {
     sequencer.play()
   }
@@ -212,6 +218,9 @@ class MockMusicEngine: BaseMusicEngine, MusicEngine {
     for ind in 0..<numLoopPlayers {
       loopPlayers.append(LoopPlayer(id: ind))
     }
+  }
+
+  func reset() {
   }
 
   func play() {
