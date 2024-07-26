@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class CanvasViewModel: ObservableObject {
   let musicEngine: MusicEngine
@@ -15,6 +16,7 @@ class CanvasViewModel: ObservableObject {
   @Published var libraryBlocks: [Block]
   @Published var selectedCategoryName: String = ""
   @Published var librarySlotLocations: [CGPoint]
+  @Published var canvasSnapshot: UIImage?
 
   var draggingBlock: Block?
   var canvasScrollOffset = CGPoint(x: 0, y: 0)
@@ -154,49 +156,176 @@ extension CanvasViewModel {
     updateAllBlocksList()
     syncBlockLocationsWithSlots()
   }
+}
 
+// Canvas managmeent events
+
+extension CanvasViewModel {
   func clearCanvas() {
     canvasModel.clear()
     updateAllBlocksList()
   }
 
+  func renameSong(newName: String, thunbnail: UIImage?) {
+    canvasModel.name = newName
+    canvasModel.thumnail = thunbnail
+
+    saveSong()
+  }
+
   func saveSong() {
-    let documentDirectoryURL = URL(
-      fileURLWithPath: "testSong",
-      relativeTo: URL.documentsDirectory)
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+      print("Error: Unable to access documents directory")
+      return
+    }
+    let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
+    if !FileManager.default.fileExists(atPath: dataDirectoryURL.path) {
+      do {
+        try FileManager.default.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+      } catch {
+        print("Error: Unable to create directory \(dataDirectoryURL)")
+        return
+      }
+    }
+
+    let jsonFileURL = dataDirectoryURL
+      .appendingPathComponent(canvasModel.name)
       .appendingPathExtension("json")
 
     let encoder = JSONEncoder()
     do {
       let canvasJSONData = try encoder.encode(canvasModel)
-      try canvasJSONData.write(to: documentDirectoryURL, options: .atomicWrite)
-      print("writing song to \(documentDirectoryURL)")
+      try canvasJSONData.write(to: jsonFileURL, options: .atomicWrite)
+      print("writing song to \(jsonFileURL)")
     } catch {
       // TODO proper error handling
-      print("Error saving file \(documentDirectoryURL)")
+      print("Error saving file \(jsonFileURL)")
+    }
+
+    if let thumbnail = canvasModel.thumnail, let imageData = thumbnail.pngData() {
+      let thumbnailURL = dataDirectoryURL
+        .appendingPathComponent(canvasModel.name)
+        .appendingPathExtension("png")
+
+      do {
+        try imageData.write(to: thumbnailURL)
+        print("writing thumbnail to \(thumbnailURL)")
+      } catch {
+        print("Error saving thumbnail \(thumbnailURL)")
+      }
     }
   }
 
   func loadSong() {
-    let documentDirectoryURL = URL(
-      fileURLWithPath: "testSong",
-      relativeTo: URL.documentsDirectory)
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+      print("Error: Unable to access documents directory")
+      return
+    }
+    let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
+
+    let jsonFileURL = dataDirectoryURL
+      .appendingPathComponent(canvasModel.name)
       .appendingPathExtension("json")
+    let thumbnailURL = dataDirectoryURL
+      .appendingPathComponent(canvasModel.name)
+      .appendingPathExtension("png")
 
     let decoder = JSONDecoder()
     do {
-      let canvasJSONData = try Data(contentsOf: documentDirectoryURL)
+      let canvasJSONData = try Data(contentsOf: jsonFileURL)
       let canvasModel = try decoder.decode(CanvasModel.self, from: canvasJSONData)
 
-      resetCanvasModel(newCanvasModel: canvasModel)
+      let imageData = try Data(contentsOf: thumbnailURL)
+      if let image = UIImage(data: imageData) {
+        canvasModel.thumnail = image
+      } else {
+        print("Error: Unable to convert data to UIImage")
+      }
 
+      resetCanvasModel(newCanvasModel: canvasModel)
     } catch {
       // TODO proper error handling
-      print("Error loading file \(documentDirectoryURL)")
+      print("Error loading json file \(jsonFileURL)")
+      print("Error loading image file \(thumbnailURL)")
     }
   }
 }
 
+// Thumbnail capture funcnationality
+
+extension CanvasViewModel {
+  func getThumbnailFromScreenShot(screenShotImage: CGImage?) -> UIImage? {
+    let blockBounds = getSquareBoundsAroundCanvasBlocks()
+    if let croppedImage = screenShotImage?.cropping(to: blockBounds) {
+      let croppedUIImage = UIImage(cgImage: croppedImage)
+      let thumbSize = CGSize(width: 70, height: 70) // TODO - move these to constants somewhere
+      let renderer = UIGraphicsImageRenderer(size: thumbSize)
+      return renderer.image { _ in
+        croppedUIImage.draw(in: CGRect(origin: .zero, size: thumbSize))
+      }
+    }
+    return nil
+  }
+
+  func getSquareBoundsAroundCanvasBlocks() -> CGRect {
+    var minX: CGFloat = CanvasViewModel.canvasWidth
+    var minY: CGFloat = CanvasViewModel.canvasHeight
+    var maxX: CGFloat = 0
+    var maxY: CGFloat = 0
+
+    for block in allBlocks {
+      if block.location.x < minX {
+        minX = block.location.x
+      }
+      if block.location.y < minY {
+        minY = block.location.y
+      }
+      if block.location.x > maxX {
+        maxX = block.location.x
+      }
+      if block.location.y > maxY {
+        maxY = block.location.y
+      }
+    }
+
+    let margin = CanvasViewModel.blockSize
+    minX -= margin
+    minY -= margin
+    maxX += margin
+    maxY += margin
+
+    var xLoc = minX
+    var yLoc = minY
+    var width = maxX - minX
+    var height = maxY - minY
+
+    // Turn the bounds into a square and center
+    if width > height {
+      yLoc -= (width - height) / 2
+      height = width
+    } else {
+      xLoc -= (height - width) / 2
+      width = height
+    }
+
+    // Make sure bounds is not off the canvas
+    if xLoc < 0 {
+      xLoc = 0
+    }
+    if xLoc + width > CanvasViewModel.canvasWidth {
+      xLoc -= xLoc + width - CanvasViewModel.canvasWidth
+    }
+
+    if yLoc < 0 {
+      yLoc = 0
+    }
+    if yLoc + height > CanvasViewModel.canvasHeight {
+      yLoc -= yLoc + height - CanvasViewModel.canvasHeight
+    }
+
+    return CGRect(x: xLoc, y: yLoc, width: width, height: height)
+  }
+}
 
 // Internal State Managment
 

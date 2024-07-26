@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import ImageIO
 
 
 struct CanvasView: View {
   @StateObject var viewModel: CanvasViewModel
+  @State var showingRenameSongView = false
+
+  var canvasBlocksView: some View {
+    CanvasBlocksView(viewModel: viewModel)
+  }
 
   var body: some View {
     NavigationView {
@@ -18,7 +24,7 @@ struct CanvasView: View {
           ZStack {
             BackgroundDots()
 
-            CanvasBlocksView(viewModel: viewModel)
+            canvasBlocksView
 
             GeometryReader { proxy in
               let xOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minX
@@ -49,8 +55,23 @@ struct CanvasView: View {
     }
     .navigationBarItems(
       trailing: Menu {
+        Button("Rename") {
+          if let snapshotImage = snapshot(snapshotView: canvasBlocksView) {
+            viewModel.canvasSnapshot = snapshotImage
+            showingRenameSongView = true
+          }
+        }
         Button("Save") {
-          viewModel.saveSong()
+          // If the song hasnt been saved yet, get its thumbnail and make the user
+          // name it.
+          if viewModel.canvasModel.thumnail == nil {
+            if let snapshotImage = snapshot(snapshotView: canvasBlocksView) {
+              viewModel.canvasSnapshot = snapshotImage
+              showingRenameSongView = true
+            }
+          } else {
+            viewModel.saveSong()
+          }
         }
         Button("Load") {
           viewModel.loadSong()
@@ -58,9 +79,22 @@ struct CanvasView: View {
         Button("Clear Canvas") {
           viewModel.clearCanvas()
         }
-    } label: {
-      Image(systemName: "ellipsis.circle")
+      } label: {
+        Image(systemName: "ellipsis.circle")
       })
+    .sheet(isPresented: $showingRenameSongView, content: {
+      RenameSongSheet(viewModel: viewModel, showingRenameSongView: $showingRenameSongView)
+    })
+  }
+
+  func snapshot(snapshotView: some View) -> UIImage? {
+    let imagerenderer = ImageRenderer(
+      content: VStack {
+        snapshotView
+      }
+        .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)
+    )
+    return viewModel.getThumbnailFromScreenShot(screenShotImage: imagerenderer.cgImage)
   }
 }
 
@@ -144,7 +178,6 @@ struct CanvasBlocksView: View {
   }
 }
 
-
 struct BackgroundDots: View {
   var body: some View {
     ZStack { // Background dots
@@ -199,6 +232,15 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE] - swap out blocks when picker choice is made
 // [DONE] - add dot grid background to canvas (so it is easier to see scrolling)
 // [DONE] Refactor views into smaller subviews
+
+// Save / Delete
+// [DONE] - name song on save
+// [DONE] - take screenshot for song to use as thumb
+// [DONE] - save song and thumbnail to documents directory
+// [DONE] - load song and thumbnail from documents directory
+// - load correct library for song
+// - populate saved songs lists
+
 
 // Update tests for library behavior
 // context tap to select block

@@ -11,6 +11,9 @@ import SwiftUI
 class CanvasModel: ObservableObject, Codable {
   var musicEngine: MusicEngine?
 
+  @Published var name: String = "MySong"
+  @Published var thumnail: UIImage?
+
   @Published var blocksGroups: [BlockGroup] = []
   @Published var library = Library()
 
@@ -135,6 +138,7 @@ class CanvasModel: ObservableObject, Codable {
   // Codable implementation
 
   enum CodingKeys: String, CodingKey {
+    case name
     case blocksGroups
     case library
   }
@@ -142,6 +146,7 @@ class CanvasModel: ObservableObject, Codable {
   required init(from decoder: Decoder) throws {
     do {
       let container = try decoder.container(keyedBy: CodingKeys.self)
+      name = try container.decode(String.self, forKey: .name)
       blocksGroups = try container.decode([BlockGroup].self, forKey: .blocksGroups)
       library = try container.decode(Library.self, forKey: .library)
     } catch {
@@ -152,6 +157,7 @@ class CanvasModel: ObservableObject, Codable {
 
   func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(name, forKey: .name)
     try container.encode(blocksGroups, forKey: .blocksGroups)
     try container.encode(library, forKey: .library)
   }
