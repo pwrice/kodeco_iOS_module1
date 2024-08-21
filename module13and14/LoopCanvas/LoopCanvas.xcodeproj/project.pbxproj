@@ -14,6 +14,10 @@
 		C13BCD9B2C4C12380037AEF4 /* RenameSongSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BCD9A2C4C12380037AEF4 /* RenameSongSheet.swift */; };
 		C1498E392C18881900118C38 /* CanvasModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1498E382C18881900118C38 /* CanvasModelTests.swift */; };
 		C1498E3B2C18884A00118C38 /* BlockGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1498E3A2C18884A00118C38 /* BlockGroupTests.swift */; };
+		C15DCC912C6E32430061453B /* CanvasStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */; };
+		C15DCC932C6E3E4A0061453B /* CanvasStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */; };
+		C1706DDB2C6CE4E000DAC858 /* SongListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDA2C6CE4E000DAC858 /* SongListView.swift */; };
+		C1706DDD2C6CE5B700DAC858 /* CanvasStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */; };
 		C19D85492C08AE5900477545 /* LoopCanvasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85482C08AE5900477545 /* LoopCanvasApp.swift */; };
 		C19D854B2C08AE5900477545 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D854A2C08AE5900477545 /* ContentView.swift */; };
 		C19D854D2C08AE6500477545 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C19D854C2C08AE6500477545 /* Assets.xcassets */; };
@@ -64,6 +68,9 @@
 		C13BCD9A2C4C12380037AEF4 /* RenameSongSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameSongSheet.swift; sourceTree = "<group>"; };
 		C1498E382C18881900118C38 /* CanvasModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasModelTests.swift; sourceTree = "<group>"; };
 		C1498E3A2C18884A00118C38 /* BlockGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockGroupTests.swift; sourceTree = "<group>"; };
+		C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStoreTests.swift; sourceTree = "<group>"; };
+		C1706DDA2C6CE4E000DAC858 /* SongListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListView.swift; sourceTree = "<group>"; };
+		C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStore.swift; sourceTree = "<group>"; };
 		C19D85452C08AE5900477545 /* LoopCanvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoopCanvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C19D85482C08AE5900477545 /* LoopCanvasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCanvasApp.swift; sourceTree = "<group>"; };
 		C19D854A2C08AE5900477545 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -209,6 +216,7 @@
 				C19D85592C08AE6500477545 /* CanvasViewModelTests.swift */,
 				C1498E382C18881900118C38 /* CanvasModelTests.swift */,
 				C1498E3A2C18884A00118C38 /* BlockGroupTests.swift */,
+				C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */,
 			);
 			path = LoopCanvasTests;
 			sourceTree = "<group>";
@@ -229,6 +237,7 @@
 				C1F5EEA12C133A4900298B00 /* Library.swift */,
 				C1F5EEE42C14AE6F00298B00 /* Block.swift */,
 				C1F5EEE72C14AE9400298B00 /* BlockGroup.swift */,
+				C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -244,6 +253,7 @@
 				C12C6E8A2C2AF39300B01C58 /* HomeView.swift */,
 				C12C6E8C2C2AFA7700B01C58 /* PlaceHolderView.swift */,
 				C13BCD9A2C4C12380037AEF4 /* RenameSongSheet.swift */,
+				C1706DDA2C6CE4E000DAC858 /* SongListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -557,6 +567,8 @@
 				C1F5EEE82C14AE9400298B00 /* BlockGroup.swift in Sources */,
 				C12C6E892C2AF2E200B01C58 /* BlockView.swift in Sources */,
 				C1F5EEA22C133A4900298B00 /* Library.swift in Sources */,
+				C1706DDB2C6CE4E000DAC858 /* SongListView.swift in Sources */,
+				C1706DDD2C6CE5B700DAC858 /* CanvasStore.swift in Sources */,
 				C19D854B2C08AE5900477545 /* ContentView.swift in Sources */,
 				C1B564C52C0D243E002FDDD4 /* CanvasModel.swift in Sources */,
 				C13BCD9B2C4C12380037AEF4 /* RenameSongSheet.swift in Sources */,
@@ -579,6 +591,8 @@
 				C1B564C62C0D243E002FDDD4 /* CanvasModel.swift in Sources */,
 				C1498E392C18881900118C38 /* CanvasModelTests.swift in Sources */,
 				C1498E3B2C18884A00118C38 /* BlockGroupTests.swift in Sources */,
+				C15DCC932C6E3E4A0061453B /* CanvasStoreTests.swift in Sources */,
+				C15DCC912C6E32430061453B /* CanvasStore.swift in Sources */,
 				C1B564C92C0D25D0002FDDD4 /* CanvasViewModel.swift in Sources */,
 				C1F5EEA32C133AAE00298B00 /* Library.swift in Sources */,
 				C1F5EEE92C14AE9400298B00 /* BlockGroup.swift in Sources */,

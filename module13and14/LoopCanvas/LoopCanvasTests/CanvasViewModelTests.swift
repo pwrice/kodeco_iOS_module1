@@ -11,10 +11,12 @@ import XCTest
 final class CanvasViewModelTests: XCTestCase {
   var canvasViewModel: CanvasViewModel!
   var musicEngine: MockMusicEngine!
+  var canvasStore: CanvasStore!
 
   override func setUpWithError() throws {
     musicEngine = MockMusicEngine()
-    canvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine)
+    canvasStore = CanvasStore()
+    canvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine, canvasStore: canvasStore)
     canvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
     canvasViewModel.syncBlockLocationsWithSlots()
     canvasViewModel.updateAllBlocksList()
@@ -372,17 +374,24 @@ final class CanvasViewModelTests: XCTestCase {
     XCTAssertTrue(origBlockGroup.allBlocks.contains(origFirstBlock))
     XCTAssertTrue(origBlockGroup.allBlocks.contains(origSecondBlock))
 
+    canvasViewModel.canvasModel.name = "TEST_CANVAS"
+
     canvasViewModel.saveSong()
 
     // Create a new canvas view model with an empty canvas
-    let newCanvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine)
+    let newCanvasViewModel = CanvasViewModel(
+      canvasModel: CanvasModel(),
+      musicEngine: musicEngine,
+      canvasStore: canvasStore)
     newCanvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
     newCanvasViewModel.syncBlockLocationsWithSlots()
     newCanvasViewModel.updateAllBlocksList()
     XCTAssertEqual(newCanvasViewModel.canvasModel.blocksGroups.count, 0)
 
+    newCanvasViewModel.canvasModel.name = "TEST_CANVAS" // To make sure we load the correct JSON
     newCanvasViewModel.loadSong()
 
+    XCTAssertEqual(newCanvasViewModel.canvasModel.name, "TEST_CANVAS")
     XCTAssertEqual(newCanvasViewModel.canvasModel.blocksGroups.count, 1)
     let newBlockGroup = try XCTUnwrap(canvasViewModel.canvasModel.blocksGroups.first)
     XCTAssertEqual(newBlockGroup.id, origBlockGroup.id)

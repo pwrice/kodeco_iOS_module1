@@ -127,7 +127,8 @@ final class CanvasModelTests: XCTestCase {
       location: CGPoint(x: 0, y: 0),
       color: .pink,
       icon: "square",
-      loopURL: URL(fileURLWithPath: "TEST_FILE.wav", relativeTo: Bundle.main.bundleURL)
+      loopURL: URL(fileURLWithPath: "TEST_FILE.wav", relativeTo: Bundle.main.bundleURL),
+      relativePath: "TEST_FILE.wav"
     )
   }
 
@@ -137,7 +138,8 @@ final class CanvasModelTests: XCTestCase {
       location: CGPoint(x: 100, y: 100),
       color: .blue,
       icon: "circle",
-      loopURL: URL(fileURLWithPath: "TEST_FILE_1.wav", relativeTo: Bundle.main.bundleURL)
+      loopURL: URL(fileURLWithPath: "TEST_FILE_1.wav", relativeTo: Bundle.main.bundleURL),
+      relativePath: "TEST_FILE_1.wav"
     )
   }
 }

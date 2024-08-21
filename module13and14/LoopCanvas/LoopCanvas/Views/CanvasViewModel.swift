@@ -10,6 +10,7 @@ import SwiftUI
 
 class CanvasViewModel: ObservableObject {
   let musicEngine: MusicEngine
+  let canvasStore: CanvasStore
 
   @Published var canvasModel: CanvasModel
   @Published var allBlocks: [Block]
@@ -26,7 +27,7 @@ class CanvasViewModel: ObservableObject {
   static let canvasWidth: CGFloat = 1000.0
   static let canvasHeight: CGFloat = 1000.0
 
-  init(canvasModel: CanvasModel, musicEngine: MusicEngine) {
+  init(canvasModel: CanvasModel, musicEngine: MusicEngine, canvasStore: CanvasStore) {
     self.librarySlotLocations = [
       CGPoint(x: 50, y: 150),
       CGPoint(x: 150, y: 150),
@@ -40,6 +41,8 @@ class CanvasViewModel: ObservableObject {
 
     self.musicEngine = musicEngine
     self.canvasModel = canvasModel
+    self.canvasStore = canvasStore
+
     self.allBlocks = []
     self.libraryBlocks = []
     self.canvasModel.musicEngine = musicEngine
@@ -174,79 +177,12 @@ extension CanvasViewModel {
   }
 
   func saveSong() {
-    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error: Unable to access documents directory")
-      return
-    }
-    let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
-    if !FileManager.default.fileExists(atPath: dataDirectoryURL.path) {
-      do {
-        try FileManager.default.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-      } catch {
-        print("Error: Unable to create directory \(dataDirectoryURL)")
-        return
-      }
-    }
-
-    let jsonFileURL = dataDirectoryURL
-      .appendingPathComponent(canvasModel.name)
-      .appendingPathExtension("json")
-
-    let encoder = JSONEncoder()
-    do {
-      let canvasJSONData = try encoder.encode(canvasModel)
-      try canvasJSONData.write(to: jsonFileURL, options: .atomicWrite)
-      print("writing song to \(jsonFileURL)")
-    } catch {
-      // TODO proper error handling
-      print("Error saving file \(jsonFileURL)")
-    }
-
-    if let thumbnail = canvasModel.thumnail, let imageData = thumbnail.pngData() {
-      let thumbnailURL = dataDirectoryURL
-        .appendingPathComponent(canvasModel.name)
-        .appendingPathExtension("png")
-
-      do {
-        try imageData.write(to: thumbnailURL)
-        print("writing thumbnail to \(thumbnailURL)")
-      } catch {
-        print("Error saving thumbnail \(thumbnailURL)")
-      }
-    }
+    canvasStore.saveCanvas(canvasModel: canvasModel)
   }
 
   func loadSong() {
-    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error: Unable to access documents directory")
-      return
-    }
-    let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
-
-    let jsonFileURL = dataDirectoryURL
-      .appendingPathComponent(canvasModel.name)
-      .appendingPathExtension("json")
-    let thumbnailURL = dataDirectoryURL
-      .appendingPathComponent(canvasModel.name)
-      .appendingPathExtension("png")
-
-    let decoder = JSONDecoder()
-    do {
-      let canvasJSONData = try Data(contentsOf: jsonFileURL)
-      let canvasModel = try decoder.decode(CanvasModel.self, from: canvasJSONData)
-
-      let imageData = try Data(contentsOf: thumbnailURL)
-      if let image = UIImage(data: imageData) {
-        canvasModel.thumnail = image
-      } else {
-        print("Error: Unable to convert data to UIImage")
-      }
-
+    if let canvasModel = canvasStore.loadCanvas(name: canvasModel.name) {
       resetCanvasModel(newCanvasModel: canvasModel)
-    } catch {
-      // TODO proper error handling
-      print("Error loading json file \(jsonFileURL)")
-      print("Error loading image file \(thumbnailURL)")
     }
   }
 }

@@ -215,7 +215,8 @@ struct CanvasView_Previews: PreviewProvider {
     CanvasView(
       viewModel: CanvasViewModel(
         canvasModel: CanvasModel(),
-        musicEngine: MockMusicEngine()
+        musicEngine: MockMusicEngine(),
+        canvasStore: CanvasStore()
       ))
   }
 }
@@ -239,7 +240,7 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE] - save song and thumbnail to documents directory
 // [DONE] - load song and thumbnail from documents directory
 // - load correct library for song
-// - populate saved songs lists
+// - build all songs view
 
 
 // Update tests for library behavior

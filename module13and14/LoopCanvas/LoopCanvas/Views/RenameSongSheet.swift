@@ -56,7 +56,8 @@ struct RenameSongSheet_Previews: PreviewProvider {
     RenameSongSheet(
       viewModel: CanvasViewModel(
         canvasModel: CanvasModel(),
-        musicEngine: MockMusicEngine()
+        musicEngine: MockMusicEngine(),
+        canvasStore: CanvasStore()
       ),
       showingRenameSongView: .constant(true))
   }

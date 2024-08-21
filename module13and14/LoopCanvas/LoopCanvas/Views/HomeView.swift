@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-  @StateObject var canvasViewModel = CanvasViewModel(
-    canvasModel: CanvasModel(), musicEngine: AudioKitMusicEngine())
-
+  @StateObject var canvasStore = CanvasStore()
   var body: some View {
     NavigationStack {
       List {
@@ -42,6 +40,10 @@ struct HomeView: View {
       }
       .navigationDestination(for: String.self) { selection in
         if selection == "New Song" {
+          let canvasViewModel = CanvasViewModel(
+            canvasModel: CanvasModel(),
+            musicEngine: AudioKitMusicEngine(),
+            canvasStore: canvasStore)
           CanvasView(viewModel: canvasViewModel)
         } else if selection == "All Songs" {
           PlaceHolderView()
@@ -58,6 +60,8 @@ struct HomeView: View {
   }
 }
 
-#Preview {
-  HomeView()
+struct HomeView_Previews: PreviewProvider {
+  static var previews: some View {
+    HomeView()
+  }
 }
