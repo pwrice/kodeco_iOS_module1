@@ -19,7 +19,6 @@
 		C1706DDB2C6CE4E000DAC858 /* SongListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDA2C6CE4E000DAC858 /* SongListView.swift */; };
 		C1706DDD2C6CE5B700DAC858 /* CanvasStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */; };
 		C19D85492C08AE5900477545 /* LoopCanvasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85482C08AE5900477545 /* LoopCanvasApp.swift */; };
-		C19D854B2C08AE5900477545 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D854A2C08AE5900477545 /* ContentView.swift */; };
 		C19D854D2C08AE6500477545 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C19D854C2C08AE6500477545 /* Assets.xcassets */; };
 		C19D85502C08AE6500477545 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C19D854F2C08AE6500477545 /* Preview Assets.xcassets */; };
 		C19D855A2C08AE6500477545 /* CanvasViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85592C08AE6500477545 /* CanvasViewModelTests.swift */; };
@@ -73,7 +72,6 @@
 		C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStore.swift; sourceTree = "<group>"; };
 		C19D85452C08AE5900477545 /* LoopCanvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoopCanvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C19D85482C08AE5900477545 /* LoopCanvasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCanvasApp.swift; sourceTree = "<group>"; };
-		C19D854A2C08AE5900477545 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C19D854C2C08AE6500477545 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C19D854F2C08AE6500477545 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C19D85552C08AE6500477545 /* LoopCanvasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopCanvasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,7 +243,6 @@
 		C19D85742C08AF2400477545 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C19D854A2C08AE5900477545 /* ContentView.swift */,
 				C19D85762C08B00C00477545 /* CanvasView.swift */,
 				C1B564C72C0D25D0002FDDD4 /* CanvasViewModel.swift */,
 				C12C6E862C2AF29500B01C58 /* LibraryView.swift */,
@@ -569,7 +566,6 @@
 				C1F5EEA22C133A4900298B00 /* Library.swift in Sources */,
 				C1706DDB2C6CE4E000DAC858 /* SongListView.swift in Sources */,
 				C1706DDD2C6CE5B700DAC858 /* CanvasStore.swift in Sources */,
-				C19D854B2C08AE5900477545 /* ContentView.swift in Sources */,
 				C1B564C52C0D243E002FDDD4 /* CanvasModel.swift in Sources */,
 				C13BCD9B2C4C12380037AEF4 /* RenameSongSheet.swift in Sources */,
 				C19D85492C08AE5900477545 /* LoopCanvasApp.swift in Sources */,

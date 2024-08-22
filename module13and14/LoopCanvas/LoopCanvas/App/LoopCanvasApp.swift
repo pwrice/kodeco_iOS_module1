@@ -11,7 +11,7 @@ import SwiftUI
 struct LoopCanvasApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      HomeView()
     }
   }
 }
