@@ -20,7 +20,7 @@ class CanvasViewModel: ObservableObject {
   @Published var canvasSnapshot: UIImage?
 
   var draggingBlock: Block?
-  var canvasScrollOffset = CGPoint(x: 0, y: 0)
+  var canvasScrollOffset = CGPoint.zero
 
   static let blockSize: CGFloat = 70.0
   static let blockSpacing: CGFloat = 10.0

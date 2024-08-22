@@ -19,10 +19,10 @@ struct RenameSongSheet: View {
           Section(header: Text("Thumbnail")) {
             if let snapshot = viewModel.canvasSnapshot {
               Image(uiImage: snapshot)
-                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                .shadow(radius: 10)
             } else {
               Image(systemName: "photo")
-                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                .shadow(radius: 10)
             }
           }
           Section(header: Text("Song Name")) {

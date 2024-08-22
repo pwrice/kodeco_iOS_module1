@@ -100,7 +100,7 @@ struct CanvasView: View {
 
 struct ViewOffsetKey: PreferenceKey {
   typealias Value = CGPoint
-  static var defaultValue = CGPoint(x: CGFloat.zero, y: CGFloat.zero)
+  static var defaultValue = CGPoint.zero
   static func reduce(value: inout Value, nextValue: () -> Value) {
     let next = nextValue()
     value = CGPoint(x: value.x + next.x, y: value.y + next.y)  // value += nextValue()

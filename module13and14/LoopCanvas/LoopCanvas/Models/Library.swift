@@ -139,7 +139,7 @@ class Library: ObservableObject, Codable {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     name = try container.decode(String.self, forKey: .name)
     self.allBlocks = []
-    self.libaryFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
+    self.libaryFrame = CGRect.zero
   }
 
   func encode(to encoder: Encoder) throws {
