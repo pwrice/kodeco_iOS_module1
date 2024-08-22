@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 enum SlotPostion {
   case top
@@ -58,6 +59,11 @@ struct BlockGroupSlot {
 }
 
 class BlockGroup: ObservableObject, Identifiable, Codable {
+  private static let logger = Logger(
+      subsystem: "Models",
+      category: String(describing: BlockGroup.self)
+  )
+
   var musicEngine: MusicEngine?
 
   let id: Int
@@ -179,12 +185,6 @@ class BlockGroup: ObservableObject, Identifiable, Codable {
       let blocksContinuing = newPlayingBlocks.filter { currentlyPlayingBlockIds.contains($0.id) }
       let blocksStopping = currentlyPlayingBlocks.filter { !newPlayingBlockIds.contains($0.id) }
 
-      // print(" all blocks grid PosX = \(allBlocks.map { $0.blockGroupGridPosX })")
-      // print("oldPlayPositionX \(oldPlayPositionX) newPlayPositionX \(newPlayPositionX)")
-      // print("blocksStarting \(blocksStarting.map { $0.id })")
-      // print("blocksContinuing \(blocksContinuing.map { $0.id })")
-      // print("blocksStopping \(blocksStopping.map { $0.id })")
-
       for block in blocksStarting {
         block.isPlaying = true
         block.loopPlayer?.loopPlaying = true
@@ -220,7 +220,7 @@ class BlockGroup: ObservableObject, Identifiable, Codable {
       allBlocks = try container.decode([Block].self, forKey: .allBlocks)
       currentPlayPosX = 0
     } catch {
-      print("BlockGroup decode error \(error)")
+      Self.logger.error("BlockGroup decode error \(error)")
       throw error
     }
   }

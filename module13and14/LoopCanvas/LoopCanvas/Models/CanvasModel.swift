@@ -7,8 +7,14 @@
 
 import Foundation
 import SwiftUI
+import os
 
 class CanvasModel: ObservableObject, Codable {
+  private static let logger = Logger(
+      subsystem: "Models",
+      category: String(describing: CanvasModel.self)
+  )
+
   var musicEngine: MusicEngine?
 
   @Published var name: String = "MySong"
@@ -150,7 +156,7 @@ class CanvasModel: ObservableObject, Codable {
       blocksGroups = try container.decode([BlockGroup].self, forKey: .blocksGroups)
       library = try container.decode(Library.self, forKey: .library)
     } catch {
-      print("CanvasModel decode error \(error)")
+      Self.logger.error("CanvasModel decode error \(error)")
       throw error
     }
   }

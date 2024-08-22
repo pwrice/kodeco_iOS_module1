@@ -7,8 +7,14 @@
 
 import Foundation
 import SwiftUI
+import os
 
 class Block: ObservableObject, Identifiable, Codable {
+  private static let logger = Logger(
+      subsystem: "Models",
+      category: String(describing: Block.self)
+  )
+
   // Persistent props
   @Published var id: Int
   @Published var location: CGPoint
@@ -150,7 +156,7 @@ class Block: ObservableObject, Identifiable, Codable {
         loopURL = URL(fileURLWithPath: relativePath, relativeTo: Bundle.main.bundleURL)
       }
     } catch {
-      print("Block decode error: \(error)")
+      Self.logger.error("Block decode error: \(error)")
       throw error
     }
   }

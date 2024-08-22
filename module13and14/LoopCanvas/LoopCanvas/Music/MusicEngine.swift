@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import AudioKit
 import AVFoundation
+import os
 
 
 protocol MusicEngine: AnyObject {
@@ -31,6 +32,11 @@ protocol MusicEngineDelegate: AnyObject {
 }
 
 class LoopPlayer {
+  private static let logger = Logger(
+      subsystem: "MusicEngine",
+      category: String(describing: LoopPlayer.self)
+  )
+
   let id: Int
   var loopURL: URL?
   let audioPlayer: AudioPlayer?
@@ -51,7 +57,7 @@ class LoopPlayer {
       let file = try AVAudioFile(forReading: loopURL)
       try audioPlayer?.load(file: file, buffered: true, preserveEditTime: true)
     } catch let error {
-      print("LoopPlayer.loadLoop() error: \(error)")
+      Self.logger.error("LoopPlayer.loadLoop() error: \(error)")
     }
 
     audioPlayer?.isEditTimeEnabled = true
@@ -62,6 +68,11 @@ class LoopPlayer {
 }
 
 class BaseMusicEngine {
+  private static let logger = Logger(
+      subsystem: "MusicEngine",
+      category: String(describing: BaseMusicEngine.self)
+  )
+
   var nextBarLogicTick: Int = 15 // when we run the logic to schedule the next bar loop, advance the block counter etc..
   var loopPlayers: [LoopPlayer] = []
   var tempo = BPM(80.0) // TODO - set this dynamically per library set
@@ -98,7 +109,7 @@ class BaseMusicEngine {
   }
 
   func scheduleAudioPlaybackOnClickTrack(audioPlayer: AudioPlayer, beat: Double) {
-    print("error - need to override scheduleAudioPlaybackOnClickTrack")
+    Self.logger.error("Need to override scheduleAudioPlaybackOnClickTrack")
   }
 
   required init() {
@@ -129,6 +140,11 @@ class BaseMusicEngine {
 // TODO - handle app events to restart AudioKit such as pause for phonecall, background audio etc..
 
 class AudioKitMusicEngine: BaseMusicEngine, MusicEngine {
+  private static let logger = Logger(
+      subsystem: "MusicEngine",
+      category: String(describing: AudioKitMusicEngine.self)
+  )
+
   let engine = AudioEngine()
   var sequencer = AppleSequencer()
   var clickTrackMidiCallback = MIDICallbackInstrument()
@@ -185,7 +201,7 @@ class AudioKitMusicEngine: BaseMusicEngine, MusicEngine {
       let avTime = AVAudioTime(hostTime: hostTime)
       audioPlayer.play(at: avTime)
     } catch let error {
-      print("clickTrackMidiCallback.callback error: \(error)")
+      Self.logger.error("clickTrackMidiCallback.callback error: \(error)")
     }
   }
 

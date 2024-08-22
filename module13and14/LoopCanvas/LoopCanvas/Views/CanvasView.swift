@@ -27,13 +27,12 @@ struct CanvasView: View {
             canvasBlocksView
 
             GeometryReader { proxy in
-              let xOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minX
-              let yOffset = proxy.frame(in: .named("CanvasCoordinateSpace")).minY
+              let offset = proxy.frame(in: .named("CanvasCoordinateSpace")).origin
               // This prefernces method to calculate the scroll offset
               // seems a bit hacky. Is there a better way?
               Color.clear.preference(
                 key: ViewOffsetKey.self,
-                value: CGPoint(x: xOffset, y: yOffset))
+                value: CGPoint(x: offset.x, y: offset.y))
             }
           }
           .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)

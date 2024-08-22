@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os
 
 struct SavedCanvasModel {
   var name: String = "MySong"
@@ -15,12 +16,17 @@ struct SavedCanvasModel {
 
 // Manages browsing, loading, saving of canvas
 class CanvasStore: ObservableObject {
+  private static let logger = Logger(
+      subsystem: "Models",
+      category: String(describing: CanvasStore.self)
+  )
+
   init() {
   }
 
   func getSavedCanvases() -> [SavedCanvasModel] {
     guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error: Unable to access documents directory")
+      Self.logger.error("Error: Unable to access documents directory")
       return []
     }
     let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
@@ -28,7 +34,7 @@ class CanvasStore: ObservableObject {
       do {
         try FileManager.default.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
       } catch {
-        print("Error: Unable to create directory \(dataDirectoryURL)")
+        Self.logger.error("Error: Unable to create directory \(dataDirectoryURL)")
         return []
       }
     }
@@ -49,11 +55,11 @@ class CanvasStore: ObservableObject {
             thumnail: image
           ))
         } else {
-          print("Error: Unable to convert data to UIImage")
+          Self.logger.error("Error: Unable to convert data to UIImage")
         }
       }
     } catch {
-      print("Error: emumerating canvas filenames")
+      Self.logger.error("Error: emumerating canvas filenames")
       return []
     }
 
@@ -63,7 +69,7 @@ class CanvasStore: ObservableObject {
 
   func saveCanvas(canvasModel: CanvasModel) {
     guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error: Unable to access documents directory")
+      Self.logger.error("Error: Unable to access documents directory")
       return
     }
     let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
@@ -71,7 +77,7 @@ class CanvasStore: ObservableObject {
       do {
         try FileManager.default.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
       } catch {
-        print("Error: Unable to create directory \(dataDirectoryURL)")
+        Self.logger.error("Error: Unable to create directory \(dataDirectoryURL)")
         return
       }
     }
@@ -84,10 +90,10 @@ class CanvasStore: ObservableObject {
     do {
       let canvasJSONData = try encoder.encode(canvasModel)
       try canvasJSONData.write(to: jsonFileURL, options: .atomicWrite)
-      print("writing canvas to \(jsonFileURL)")
+      Self.logger.info("writing canvas to \(jsonFileURL)")
     } catch {
       // TODO proper error handling
-      print("Error saving file \(jsonFileURL)")
+      Self.logger.error("Error saving file \(jsonFileURL)")
     }
 
     if let thumbnail = canvasModel.thumnail, let imageData = thumbnail.pngData() {
@@ -97,16 +103,16 @@ class CanvasStore: ObservableObject {
 
       do {
         try imageData.write(to: thumbnailURL)
-        print("writing thumbnail to \(thumbnailURL)")
+        Self.logger.info("writing thumbnail to \(thumbnailURL)")
       } catch {
-        print("Error saving thumbnail \(thumbnailURL)")
+        Self.logger.error("Error saving thumbnail \(thumbnailURL)")
       }
     }
   }
 
   func loadCanvas(name: String) -> CanvasModel? {
     guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error: Unable to access documents directory")
+      Self.logger.error("Error: Unable to access documents directory")
       return nil
     }
     let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
@@ -120,9 +126,9 @@ class CanvasStore: ObservableObject {
 
     let decoder = JSONDecoder()
     do {
-      print("reading canvas from \(jsonFileURL)")
+      Self.logger.info("reading canvas from \(jsonFileURL)")
       if !FileManager.default.fileExists(atPath: jsonFileURL.path) {
-        print("Error loasding canvas: path does not exist")
+        Self.logger.error("Error loasding canvas: path does not exist")
         return nil
       }
       let canvasJSONData = try Data(contentsOf: jsonFileURL)
@@ -133,18 +139,18 @@ class CanvasStore: ObservableObject {
         if let image = UIImage(data: imageData) {
           canvasModel.thumnail = image
         } else {
-          print("Error: Unable to convert data to UIImage")
+          Self.logger.error("Error: Unable to convert data to UIImage")
         }
       } else {
-        print("Error loading image file: path does not exist \(thumbnailURL)")
+        Self.logger.error("Error loading image file: path does not exist \(thumbnailURL)")
       }
 
       return canvasModel
     } catch {
-      print("\(error)")
+      Self.logger.error("\(error)")
       // TODO proper error handling
-      print("Error loading json file \(jsonFileURL)")
-      print("Error loading image file \(thumbnailURL)")
+      Self.logger.error("Error loading json file \(jsonFileURL)")
+      Self.logger.error("Error loading image file \(thumbnailURL)")
     }
     return nil
   }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os
 
 
 class Category: ObservableObject, Identifiable {
@@ -27,6 +28,11 @@ class Category: ObservableObject, Identifiable {
 }
 
 class Library: ObservableObject, Codable {
+  private static let logger = Logger(
+      subsystem: "Models",
+      category: String(describing: Library.self)
+  )
+
   @Published var allBlocks: [Block]
   @Published var libaryFrame: CGRect
   @Published var currentCategory: Category?
@@ -120,7 +126,7 @@ class Library: ObservableObject, Codable {
       }
       setLoopCategory(categoryName: "Drums")
     } catch {
-      print(error)
+      Self.logger.error("Error loading library from JSON \(error)")
     }
   }
 
