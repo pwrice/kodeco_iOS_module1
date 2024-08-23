@@ -12,47 +12,44 @@ struct HomeView: View {
   var body: some View {
     NavigationStack {
       List {
-        NavigationLink(value: "New Song") {
-          HStack {
-            Text("New Song")
-          }
-        }
-        NavigationLink(value: "All Songs") {
-          HStack {
-            Text("All Songs")
-          }
-        }
-        NavigationLink(value: "Recents") {
-          HStack {
-            Text("Recents")
-          }
-        }
-        NavigationLink(value: "Shared") {
-          HStack {
-            Text("Shared")
-          }
-        }
-        NavigationLink(value: "Favorites") {
-          HStack {
-            Text("Favorites")
-          }
-        }
-      }
-      .navigationDestination(for: String.self) { selection in
-        if selection == "New Song" {
+        NavigationLink {
           let canvasViewModel = CanvasViewModel(
             canvasModel: CanvasModel(),
             musicEngine: AudioKitMusicEngine(),
             canvasStore: canvasStore)
           CanvasView(viewModel: canvasViewModel)
-        } else if selection == "All Songs" {
+        } label: {
+          HStack {
+            Text("New Song")
+          }
+        }
+        NavigationLink {
           PlaceHolderView()
-        } else if selection == "Recents" {
+        } label: {
+          HStack {
+            Text("All Songs")
+          }
+        }
+        NavigationLink {
           PlaceHolderView()
-        } else if selection == "Shared" {
+        } label: {
+          HStack {
+            Text("Recents")
+          }
+        }
+        NavigationLink {
           PlaceHolderView()
-        } else if selection == "Favorites" {
+        } label: {
+          HStack {
+            Text("Shared")
+          }
+        }
+        NavigationLink {
           PlaceHolderView()
+        } label: {
+          HStack {
+            Text("Favorites")
+          }
         }
       }
       .navigationTitle(Text("Loop Canvas"))
