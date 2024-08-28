@@ -24,7 +24,7 @@ struct HomeView: View {
           }
         }
         NavigationLink {
-          PlaceHolderView()
+          SongListView(canvasStore: canvasStore, screenName: "All Songs")
         } label: {
           HStack {
             Text("All Songs")

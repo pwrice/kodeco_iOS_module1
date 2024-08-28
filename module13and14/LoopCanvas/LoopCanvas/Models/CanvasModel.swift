@@ -11,8 +11,8 @@ import os
 
 class CanvasModel: ObservableObject, Codable {
   private static let logger = Logger(
-      subsystem: "Models",
-      category: String(describing: CanvasModel.self)
+    subsystem: "Models",
+    category: String(describing: CanvasModel.self)
   )
 
   var musicEngine: MusicEngine?
@@ -24,11 +24,6 @@ class CanvasModel: ObservableObject, Codable {
   @Published var library = Library()
 
   init() {
-  }
-
-  init(musicEngine: MusicEngine) {
-    self.musicEngine = musicEngine
-    musicEngine.delegate = self
   }
 
   func cleanup() {

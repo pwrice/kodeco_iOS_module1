@@ -6,8 +6,14 @@
 //
 
 import XCTest
+import os
 
 final class CanvasStoreTests: XCTestCase {
+  private static let logger = Logger(
+    subsystem: "Tests",
+    category: String(describing: CanvasStoreTests.self)
+  )
+
   var canvasStore: CanvasStore!
 
   override func setUpWithError() throws {
@@ -44,6 +50,24 @@ final class CanvasStoreTests: XCTestCase {
     XCTAssertEqual(newFirstBlock.blockGroupGridPosX, origFirstBlock.blockGroupGridPosX)
     XCTAssertEqual(newFirstBlock.blockGroupGridPosY, origFirstBlock.blockGroupGridPosY)
     XCTAssertEqual(newFirstBlock.location, origFirstBlock.location)
+  }
+
+  func testGetSavedCanvases() throws {
+    let canvasModel = CanvasModel(musicEngine: MockMusicEngine())
+    canvasModel.name = "CANVAS_STORE_TEST_CANVAS"
+    canvasModel.thumnail = UIImage(systemName: "photo")
+
+    let block = getFirstTestBlock()
+    canvasModel.addBlockGroup(initialBlock: block)
+
+    canvasStore.saveCanvas(canvasModel: canvasModel)
+
+    let savedCanvases = canvasStore.getSavedCanvases()
+
+    XCTAssertTrue(savedCanvases.count >= 1)
+    let firstSavedCanvas = try XCTUnwrap(savedCanvases.first(where: { $0.name == "CANVAS_STORE_TEST_CANVAS" }))
+    XCTAssertNotNil(firstSavedCanvas)
+    XCTAssertNotNil(firstSavedCanvas.thumnail)
   }
 
   func getFirstTestBlock() -> Block {

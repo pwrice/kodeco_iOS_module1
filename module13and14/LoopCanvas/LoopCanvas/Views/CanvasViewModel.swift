@@ -27,7 +27,7 @@ class CanvasViewModel: ObservableObject {
   static let canvasWidth: CGFloat = 1000.0
   static let canvasHeight: CGFloat = 1000.0
 
-  init(canvasModel: CanvasModel, musicEngine: MusicEngine, canvasStore: CanvasStore) {
+  init(canvasModel: CanvasModel, musicEngine: MusicEngine, canvasStore: CanvasStore, songNameToLoad: String? = nil) {
     self.librarySlotLocations = [
       CGPoint(x: 50, y: 150),
       CGPoint(x: 150, y: 150),
@@ -49,6 +49,13 @@ class CanvasViewModel: ObservableObject {
     musicEngine.delegate = canvasModel
 
     self.updateAllBlocksList()
+    
+    
+    if let songName = songNameToLoad {
+      if let canvasModel = canvasStore.loadCanvas(name: songName) {
+        resetCanvasModel(newCanvasModel: canvasModel)
+      }
+    }
   }
 
   func resetCanvasModel(newCanvasModel: CanvasModel) {

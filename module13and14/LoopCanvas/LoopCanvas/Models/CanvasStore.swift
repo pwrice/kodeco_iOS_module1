@@ -9,19 +9,31 @@ import Foundation
 import SwiftUI
 import os
 
-struct SavedCanvasModel {
-  var name: String = "MySong"
-  var thumnail: UIImage
+struct SavedCanvasModel: Identifiable, Hashable {
+  var id: Int { index }
+  let index: Int
+  let name: String
+  let thumnail: UIImage
 }
 
 // Manages browsing, loading, saving of canvas
 class CanvasStore: ObservableObject {
   private static let logger = Logger(
-      subsystem: "Models",
-      category: String(describing: CanvasStore.self)
+    subsystem: "Models",
+    category: String(describing: CanvasStore.self)
   )
 
+  @Published var savedCanvases: [SavedCanvasModel] = []
+
   init() {
+  }
+
+  init(savedCanvases: [SavedCanvasModel]) {
+    self.savedCanvases = savedCanvases
+  }
+
+  func reloadSavedCanvases() {
+    savedCanvases = getSavedCanvases()
   }
 
   func getSavedCanvases() -> [SavedCanvasModel] {
@@ -32,7 +44,8 @@ class CanvasStore: ObservableObject {
     let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
     if !FileManager.default.fileExists(atPath: dataDirectoryURL.path) {
       do {
-        try FileManager.default.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(
+          at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
       } catch {
         Self.logger.error("Error: Unable to create directory \(dataDirectoryURL)")
         return []
@@ -42,20 +55,33 @@ class CanvasStore: ObservableObject {
     var savedCanvasModels: [SavedCanvasModel] = []
     do {
       let canvasFileNames = try FileManager.default.contentsOfDirectory(atPath: dataDirectoryURL.path)
-      for canvasFileName in canvasFileNames {
-        let thumbnailURL = dataDirectoryURL
-          .appendingPathComponent(canvasFileName)
-          .appendingPathExtension("png")
-        let imageData = try Data(contentsOf: thumbnailURL)
+      for (index, canvasFileName) in canvasFileNames.enumerated() where canvasFileName.hasSuffix(".json") {
+        let canvasName = String(canvasFileName.dropLast(5))
 
-        if let image = UIImage(data: imageData) {
+        let thumbnailURL = dataDirectoryURL
+          .appendingPathComponent(canvasName)
+          .appendingPathExtension("png")
+
+
+        var image = UIImage(systemName: "Image")
+        if FileManager.default.fileExists(atPath: thumbnailURL.path) {
+          do {
+            let imageData = try Data(contentsOf: thumbnailURL)
+            if let loadedImage = UIImage(data: imageData) {
+              image = loadedImage
+            }
+          } catch {
+            Self.logger.error("Error: Unable to convert data to UIImage")
+          }
+        }
+
+        if let image = image {
           savedCanvasModels.append(
             SavedCanvasModel(
-            name: canvasFileName,
-            thumnail: image
-          ))
-        } else {
-          Self.logger.error("Error: Unable to convert data to UIImage")
+              index: index,
+              name: canvasName,
+              thumnail: image
+            ))
         }
       }
     } catch {
@@ -75,7 +101,8 @@ class CanvasStore: ObservableObject {
     let dataDirectoryURL = documentsDirectory.appendingPathComponent("LoopCanvas")
     if !FileManager.default.fileExists(atPath: dataDirectoryURL.path) {
       do {
-        try FileManager.default.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(
+          at: dataDirectoryURL, withIntermediateDirectories: true, attributes: nil)
       } catch {
         Self.logger.error("Error: Unable to create directory \(dataDirectoryURL)")
         return
@@ -126,7 +153,6 @@ class CanvasStore: ObservableObject {
 
     let decoder = JSONDecoder()
     do {
-      Self.logger.info("reading canvas from \(jsonFileURL)")
       if !FileManager.default.fileExists(atPath: jsonFileURL.path) {
         Self.logger.error("Error loasding canvas: path does not exist")
         return nil
