@@ -49,8 +49,7 @@ class CanvasViewModel: ObservableObject {
     musicEngine.delegate = canvasModel
 
     self.updateAllBlocksList()
-    
-    
+
     if let songName = songNameToLoad {
       if let canvasModel = canvasStore.loadCanvas(name: songName) {
         resetCanvasModel(newCanvasModel: canvasModel)

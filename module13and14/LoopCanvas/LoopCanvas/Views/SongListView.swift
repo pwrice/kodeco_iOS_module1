@@ -39,22 +39,19 @@ struct CanvasesGridView: View {
   var body: some View {
     LazyVGrid(columns: resultColumns) {
       ForEach(store.savedCanvases) { savedCanvas in
-        NavigationLink {
-          getLoadedCanvasView(savedCanvasModel: savedCanvas)
-        } label: {
+        NavigationLink(value: savedCanvas) {
           SavedCanvasView(savedCanvasModel: savedCanvas)
         }
       }
     }
-  }
-
-  func getLoadedCanvasView(savedCanvasModel: SavedCanvasModel) -> CanvasView {
-    let canvasViewModel = CanvasViewModel(
-      canvasModel: CanvasModel(),
-      musicEngine: AudioKitMusicEngine(),
-      canvasStore: store,
-      songNameToLoad: savedCanvasModel.name)
-    return CanvasView(viewModel: canvasViewModel)
+    .navigationDestination(for: SavedCanvasModel.self) { savedCanvas in
+      let canvasViewModel = CanvasViewModel(
+        canvasModel: CanvasModel(),
+        musicEngine: AudioKitMusicEngine(),
+        canvasStore: store,
+        songNameToLoad: savedCanvas.name)
+      CanvasView(viewModel: canvasViewModel)
+    }
   }
 }
 
