@@ -11,8 +11,8 @@ import os
 
 class Block: ObservableObject, Identifiable, Codable {
   private static let logger = Logger(
-      subsystem: "Models",
-      category: String(describing: Block.self)
+    subsystem: "Models",
+    category: String(describing: Block.self)
   )
 
   // Persistent props
@@ -165,7 +165,7 @@ class Block: ObservableObject, Identifiable, Codable {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(id, forKey: .id)
     try container.encode(location, forKey: .location)
-    let colorEnum = Colors.from(color: color)
+    let colorEnum = Colors.from(color: normalColor)
     try container.encode(colorEnum, forKey: .color)
     try container.encode(icon, forKey: .icon)
     try container.encode(relativePath, forKey: .relativePath)

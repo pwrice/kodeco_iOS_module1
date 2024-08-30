@@ -153,6 +153,7 @@ class CanvasStore: ObservableObject {
 
     let decoder = JSONDecoder()
     do {
+      Self.logger.info("Loading canvas \(jsonFileURL.path)")
       if !FileManager.default.fileExists(atPath: jsonFileURL.path) {
         Self.logger.error("Error loasding canvas: path does not exist")
         return nil

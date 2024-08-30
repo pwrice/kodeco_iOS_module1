@@ -21,6 +21,7 @@ class CanvasViewModel: ObservableObject {
 
   var draggingBlock: Block?
   var canvasScrollOffset = CGPoint.zero
+  var songNameToLoad: String?
 
   static let blockSize: CGFloat = 70.0
   static let blockSpacing: CGFloat = 10.0
@@ -50,11 +51,7 @@ class CanvasViewModel: ObservableObject {
 
     self.updateAllBlocksList()
 
-    if let songName = songNameToLoad {
-      if let canvasModel = canvasStore.loadCanvas(name: songName) {
-        resetCanvasModel(newCanvasModel: canvasModel)
-      }
-    }
+    self.songNameToLoad = songNameToLoad
   }
 
   func resetCanvasModel(newCanvasModel: CanvasModel) {
@@ -89,6 +86,13 @@ extension CanvasViewModel {
 
     musicEngine.initializeEngine()
     musicEngine.play()
+
+    if let songName = songNameToLoad {
+      if let canvasModel = canvasStore.loadCanvas(name: songName) {
+        resetCanvasModel(newCanvasModel: canvasModel)
+        songNameToLoad = nil
+      }
+    }
   }
 
   func libraryBlockLocationsUpdated() {

@@ -117,7 +117,7 @@ class Library: ObservableObject, Codable {
             color: categoryColor,
             icon: cateogryIcons[sampleInd % cateogryIcons.count],
             loopURL: URL(fileURLWithPath: sampleFile, relativeTo: categoryDirectoryURL),
-            relativePath: libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
+            relativePath: "Samples" + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
             isLibraryBlock: true)
           blocks.append(block)
         }
