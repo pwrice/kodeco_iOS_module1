@@ -14,8 +14,8 @@ final class CanvasModelTests: XCTestCase {
 
   override func setUpWithError() throws {
     musicEngine = MockMusicEngine()
-    canvasModel = CanvasModel(musicEngine: musicEngine)
     canvasModel = CanvasModel()
+    canvasModel.setMusicEngineAfterLoad(musicEngine: musicEngine)
   }
 
   func testEmptyState() throws {

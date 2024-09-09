@@ -77,12 +77,15 @@ class CanvasViewModel: ObservableObject {
 
 extension CanvasViewModel {
   func onViewAppear() {
-    canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
-    selectedCategoryName = canvasModel.library.currentCategory?.name ?? ""
-    for libraryBlock in canvasModel.library.allBlocks {
-      libraryBlock.visible = false
+    if songNameToLoad == nil {
+      canvasModel.library.loadLibraryFrom(libraryFolderName: "Funk")
+      musicEngine.tempo = canvasModel.library.tempo
+      selectedCategoryName = canvasModel.library.currentCategory?.name ?? ""
+      for libraryBlock in canvasModel.library.allBlocks {
+        libraryBlock.visible = false
+      }
+      updateAllBlocksList()
     }
-    updateAllBlocksList()
 
     musicEngine.initializeEngine()
     musicEngine.play()

@@ -158,8 +158,8 @@ final class BlockGroupTests: XCTestCase {
       location: location,
       color: .pink,
       icon: "circle",
-      loopURL: URL(fileURLWithPath: "Samples/DubSet/Horns/horns-5.wav", relativeTo: Bundle.main.bundleURL),
-      relativePath: "Samples/DubSet/Horns/horns-5.wav"
+      loopURL: URL(fileURLWithPath: "Samples/Dub/Horns/horns-5.wav", relativeTo: Bundle.main.bundleURL),
+      relativePath: "Samples/Dub/Horns/horns-5.wav"
     )
     block.blockGroupGridPosX = blockGroupGridPosX
     block.blockGroupGridPosY = blockGroupGridPosY

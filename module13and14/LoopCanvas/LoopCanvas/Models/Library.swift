@@ -27,6 +27,12 @@ class Category: ObservableObject, Identifiable {
   }
 }
 
+struct SampleSet: Hashable, Codable {
+  let name: String
+  let tempo: Double
+}
+
+
 class Library: ObservableObject, Codable {
   private static let logger = Logger(
       subsystem: "Models",
@@ -97,10 +103,22 @@ class Library: ObservableObject, Codable {
     let libraryDirectoryURL = URL(
       fileURLWithPath: samplesDirectory + libraryFolderName,
       relativeTo: Bundle.main.bundleURL)
+    
+    do {
+      let sampleSetJsonURL = URL(fileURLWithPath: "SampleSet.json", relativeTo: libraryDirectoryURL)
+      let decoder = JSONDecoder()
+      let sampleSetJSONData = try Data(contentsOf: sampleSetJsonURL)
+      let sampleSet = try decoder.decode(SampleSet.self, from: sampleSetJSONData)
+      name = sampleSet.name
+      tempo = sampleSet.tempo
+    } catch {
+      Self.logger.error("Error loading library SampleSet.json from JSON \(error)")
+    }
+    
     do {
       // Every top level folder is a different category
       let categoryFolders = try fileManager.contentsOfDirectory(atPath: libraryDirectoryURL.path)
-      for (categoryInd, categoryFolderName) in categoryFolders.enumerated() {
+      for (categoryInd, categoryFolderName) in categoryFolders.enumerated() where !categoryFolderName.hasSuffix(".json") {
         if categoryInd > maxCategories {
           break
         }
@@ -110,14 +128,14 @@ class Library: ObservableObject, Codable {
 
         var blocks: [Block] = []
         let sampleFiles = try fileManager.contentsOfDirectory(atPath: categoryDirectoryURL.path)
-        for (sampleInd, sampleFile) in sampleFiles.enumerated() {
+        for (sampleInd, sampleFile) in sampleFiles.enumerated() where sampleFile.hasSuffix(".wav") {
           let block = Block(
             id: Block.getNextBlockId(),
             location: CGPoint(x: 100, y: 100),
             color: categoryColor,
             icon: cateogryIcons[sampleInd % cateogryIcons.count],
             loopURL: URL(fileURLWithPath: sampleFile, relativeTo: categoryDirectoryURL),
-            relativePath: "Samples" + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
+            relativePath: samplesDirectory + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
             isLibraryBlock: true)
           blocks.append(block)
         }
@@ -126,7 +144,7 @@ class Library: ObservableObject, Codable {
       }
       setLoopCategory(categoryName: "Drums")
     } catch {
-      Self.logger.error("Error loading library from JSON \(error)")
+      Self.logger.error("Error loading library \(libraryFolderName) \(error)")
     }
   }
 

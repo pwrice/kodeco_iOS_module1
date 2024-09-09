@@ -17,7 +17,7 @@ final class CanvasViewModelTests: XCTestCase {
     musicEngine = MockMusicEngine()
     canvasStore = CanvasStore()
     canvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine, canvasStore: canvasStore)
-    canvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
+    canvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "Dub")
     canvasViewModel.syncBlockLocationsWithSlots()
     canvasViewModel.updateAllBlocksList()
   }
@@ -383,7 +383,7 @@ final class CanvasViewModelTests: XCTestCase {
       canvasModel: CanvasModel(),
       musicEngine: musicEngine,
       canvasStore: canvasStore)
-    newCanvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "DubSet")
+    newCanvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "Dub")
     newCanvasViewModel.syncBlockLocationsWithSlots()
     newCanvasViewModel.updateAllBlocksList()
     XCTAssertEqual(newCanvasViewModel.canvasModel.blocksGroups.count, 0)

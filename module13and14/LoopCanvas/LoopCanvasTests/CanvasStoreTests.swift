@@ -21,7 +21,8 @@ final class CanvasStoreTests: XCTestCase {
   }
 
   func testSaveAndLoadSong() throws {
-    let canvasModel = CanvasModel(musicEngine: MockMusicEngine())
+    let canvasModel = CanvasModel()
+    canvasModel.setMusicEngineAfterLoad(musicEngine: MockMusicEngine())
     canvasModel.name = "CANVAS_STORE_TEST_CANVAS"
     canvasModel.thumnail = UIImage(systemName: "photo")
 
@@ -53,7 +54,8 @@ final class CanvasStoreTests: XCTestCase {
   }
 
   func testGetSavedCanvases() throws {
-    let canvasModel = CanvasModel(musicEngine: MockMusicEngine())
+    let canvasModel = CanvasModel()
+    canvasModel.setMusicEngineAfterLoad(musicEngine: MockMusicEngine())
     canvasModel.name = "CANVAS_STORE_TEST_CANVAS"
     canvasModel.thumnail = UIImage(systemName: "photo")
 
@@ -65,7 +67,7 @@ final class CanvasStoreTests: XCTestCase {
     let savedCanvases = canvasStore.getSavedCanvases()
 
     XCTAssertTrue(savedCanvases.count >= 1)
-    let firstSavedCanvas = try XCTUnwrap(savedCanvases.first(where: { $0.name == "CANVAS_STORE_TEST_CANVAS" }))
+    let firstSavedCanvas = try XCTUnwrap(savedCanvases.first { $0.name == "CANVAS_STORE_TEST_CANVAS" })
     XCTAssertNotNil(firstSavedCanvas)
     XCTAssertNotNil(firstSavedCanvas.thumnail)
   }

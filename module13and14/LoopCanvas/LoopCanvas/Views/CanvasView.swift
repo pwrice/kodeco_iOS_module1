@@ -238,9 +238,13 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE] - take screenshot for song to use as thumb
 // [DONE] - save song and thumbnail to documents directory
 // [DONE] - load song and thumbnail from documents directory
-// - load correct library for song
-// - build all songs view
+// [DONE]- load correct library for song
+// [DONE]- build all songs view
 
+
+// - add new genre's of music
+// - add ability to switch genres
+// - add ability to download genres from server
 
 // Update tests for library behavior
 // context tap to select block
@@ -258,3 +262,6 @@ struct CanvasView_Previews: PreviewProvider {
 //   - hook up the api search here
 
 // How to make the library work with different phone sizes?
+
+
+// GB genre BPMs - electronica - 133.0 funk - 115.0
