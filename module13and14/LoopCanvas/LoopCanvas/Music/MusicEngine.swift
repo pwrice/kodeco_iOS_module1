@@ -75,9 +75,16 @@ class BaseMusicEngine {
 
   var nextBarLogicTick: Int = 15 // when we run the logic to schedule the next bar loop, advance the block counter etc..
   var loopPlayers: [LoopPlayer] = []
-  var tempo = BPM(80.0) // TODO - set this dynamically per library set
+  var tempo: BPM = 80 {
+    didSet {
+      updateSequencerTempo(newTempo: tempo)
+    }
+  }
+
   let numLoopPlayers = 16
   weak var delegate: MusicEngineDelegate?
+
+  func updateSequencerTempo(newTempo: BPM) {}
 
   func processClickTrackNote(clickTrackPosition: Duration) {
     let current16thNote = clickTrackPosition.beats * 4
@@ -203,6 +210,10 @@ class AudioKitMusicEngine: BaseMusicEngine, MusicEngine {
     } catch let error {
       Self.logger.error("clickTrackMidiCallback.callback error: \(error)")
     }
+  }
+
+  override func updateSequencerTempo(newTempo: BPM) {
+    sequencer.setTempo(newTempo)
   }
 
   func reset() {

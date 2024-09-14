@@ -7,8 +7,14 @@
 
 import Foundation
 import SwiftUI
+import os
 
 class CanvasViewModel: ObservableObject {
+  private static let logger = Logger(
+    subsystem: "ViewModels",
+    category: String(describing: Library.self)
+  )
+
   let musicEngine: MusicEngine
   let canvasStore: CanvasStore
 
@@ -16,6 +22,7 @@ class CanvasViewModel: ObservableObject {
   @Published var allBlocks: [Block]
   @Published var libraryBlocks: [Block]
   @Published var selectedCategoryName: String = ""
+  @Published var selectedSampleSetName: String = ""
   @Published var librarySlotLocations: [CGPoint]
   @Published var canvasSnapshot: UIImage?
 
@@ -59,16 +66,22 @@ class CanvasViewModel: ObservableObject {
     canvasModel.cleanup()
 
     canvasModel = newCanvasModel
+    canvasModel.library.loadAvailableSampleSets()
     canvasModel.library.loadLibraryFrom(libraryFolderName: canvasModel.library.name)
+    musicEngine.tempo = canvasModel.library.tempo
+    Self.logger.debug("Setting music engine tempo to: \(self.musicEngine.tempo)")
     canvasModel.library.syncBlockLocationsWithSlots(librarySlotLocations: librarySlotLocations)
     for libraryBlock in canvasModel.library.allBlocks {
       libraryBlock.visible = true
     }
+    selectedCategoryName = canvasModel.library.currentCategory?.name ?? ""
+    selectedSampleSetName = canvasModel.library.name
 
     allBlocks = []
     libraryBlocks = []
     updateAllBlocksList()
     canvasModel.setMusicEngineAfterLoad(musicEngine: musicEngine)
+    musicEngine.reset()
     musicEngine.play()
   }
 }
@@ -81,6 +94,7 @@ extension CanvasViewModel {
       canvasModel.library.loadLibraryFrom(libraryFolderName: "Funk")
       musicEngine.tempo = canvasModel.library.tempo
       selectedCategoryName = canvasModel.library.currentCategory?.name ?? ""
+      selectedSampleSetName = canvasModel.library.name
       for libraryBlock in canvasModel.library.allBlocks {
         libraryBlock.visible = false
       }
@@ -171,6 +185,12 @@ extension CanvasViewModel {
     canvasModel.library.setLoopCategory(categoryName: categoryName)
     updateAllBlocksList()
     syncBlockLocationsWithSlots()
+  }
+
+  func loadSampleSetAndResetCanvas(sampleSetName: String) {
+    let freshCanvasModel = CanvasModel()
+    freshCanvasModel.library.name = sampleSetName
+    resetCanvasModel(newCanvasModel: freshCanvasModel)
   }
 }
 

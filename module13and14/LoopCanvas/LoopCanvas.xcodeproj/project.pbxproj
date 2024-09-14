@@ -18,6 +18,9 @@
 		C15DCC932C6E3E4A0061453B /* CanvasStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */; };
 		C1706DDB2C6CE4E000DAC858 /* SongListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDA2C6CE4E000DAC858 /* SongListView.swift */; };
 		C1706DDD2C6CE5B700DAC858 /* CanvasStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */; };
+		C19A08A02C962A06008CCB0E /* Dub in Resources */ = {isa = PBXBuildFile; fileRef = C19A089E2C962A06008CCB0E /* Dub */; };
+		C19A08A12C962A06008CCB0E /* Funk in Resources */ = {isa = PBXBuildFile; fileRef = C19A089F2C962A06008CCB0E /* Funk */; };
+		C19A08A32C963487008CCB0E /* LibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19A08A22C963487008CCB0E /* LibraryTests.swift */; };
 		C19D85492C08AE5900477545 /* LoopCanvasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85482C08AE5900477545 /* LoopCanvasApp.swift */; };
 		C19D854D2C08AE6500477545 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C19D854C2C08AE6500477545 /* Assets.xcassets */; };
 		C19D85502C08AE6500477545 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C19D854F2C08AE6500477545 /* Preview Assets.xcassets */; };
@@ -70,6 +73,9 @@
 		C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStoreTests.swift; sourceTree = "<group>"; };
 		C1706DDA2C6CE4E000DAC858 /* SongListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListView.swift; sourceTree = "<group>"; };
 		C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStore.swift; sourceTree = "<group>"; };
+		C19A089E2C962A06008CCB0E /* Dub */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dub; sourceTree = "<group>"; };
+		C19A089F2C962A06008CCB0E /* Funk */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Funk; sourceTree = "<group>"; };
+		C19A08A22C963487008CCB0E /* LibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTests.swift; sourceTree = "<group>"; };
 		C19D85452C08AE5900477545 /* LoopCanvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoopCanvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C19D85482C08AE5900477545 /* LoopCanvasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCanvasApp.swift; sourceTree = "<group>"; };
 		C19D854C2C08AE6500477545 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,54 +90,6 @@
 		C1B564C42C0D243E002FDDD4 /* CanvasModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasModel.swift; sourceTree = "<group>"; };
 		C1B564C72C0D25D0002FDDD4 /* CanvasViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewModel.swift; sourceTree = "<group>"; };
 		C1F5EEA12C133A4900298B00 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
-		C1F5EEA42C13431900298B00 /* Bass-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bass-3.wav"; sourceTree = "<group>"; };
-		C1F5EEA52C13431900298B00 /* Bass-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bass-4.wav"; sourceTree = "<group>"; };
-		C1F5EEA62C13431900298B00 /* Bass-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bass-5.wav"; sourceTree = "<group>"; };
-		C1F5EEA72C13431900298B00 /* Bass-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bass-6.wav"; sourceTree = "<group>"; };
-		C1F5EEA82C13431900298B00 /* Midi Bass-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Midi Bass-1.wav"; sourceTree = "<group>"; };
-		C1F5EEA92C13431900298B00 /* Midi Bass-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Midi Bass-2.wav"; sourceTree = "<group>"; };
-		C1F5EEAB2C13431900298B00 /* Drums-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-1.wav"; sourceTree = "<group>"; };
-		C1F5EEAC2C13431900298B00 /* Drums-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-2.wav"; sourceTree = "<group>"; };
-		C1F5EEAD2C13431900298B00 /* Drums-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-3.wav"; sourceTree = "<group>"; };
-		C1F5EEAE2C13431900298B00 /* Drums-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-4.wav"; sourceTree = "<group>"; };
-		C1F5EEAF2C13431900298B00 /* Drums-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-5.wav"; sourceTree = "<group>"; };
-		C1F5EEB02C13431900298B00 /* Drums-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-6.wav"; sourceTree = "<group>"; };
-		C1F5EEB12C13431900298B00 /* Drums-7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Drums-7.wav"; sourceTree = "<group>"; };
-		C1F5EEB32C13431900298B00 /* guitar-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-1.wav"; sourceTree = "<group>"; };
-		C1F5EEB42C13431900298B00 /* guitar-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-2.wav"; sourceTree = "<group>"; };
-		C1F5EEB52C13431900298B00 /* guitar-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-3.wav"; sourceTree = "<group>"; };
-		C1F5EEB62C13431900298B00 /* guitar-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-4.wav"; sourceTree = "<group>"; };
-		C1F5EEB72C13431900298B00 /* guitar-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-5.wav"; sourceTree = "<group>"; };
-		C1F5EEB82C13431900298B00 /* guitar-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-6.wav"; sourceTree = "<group>"; };
-		C1F5EEB92C13431900298B00 /* guitar-7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "guitar-7.wav"; sourceTree = "<group>"; };
-		C1F5EEBB2C13431900298B00 /* horns-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-1.wav"; sourceTree = "<group>"; };
-		C1F5EEBC2C13431900298B00 /* horns-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-2.wav"; sourceTree = "<group>"; };
-		C1F5EEBD2C13431900298B00 /* horns-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-3.wav"; sourceTree = "<group>"; };
-		C1F5EEBE2C13431900298B00 /* horns-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-4.wav"; sourceTree = "<group>"; };
-		C1F5EEBF2C13431900298B00 /* horns-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-5.wav"; sourceTree = "<group>"; };
-		C1F5EEC02C13431900298B00 /* horns-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-6.wav"; sourceTree = "<group>"; };
-		C1F5EEC12C13431900298B00 /* horns-7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-7.wav"; sourceTree = "<group>"; };
-		C1F5EEC22C13431900298B00 /* horns-8.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "horns-8.wav"; sourceTree = "<group>"; };
-		C1F5EEC42C13431900298B00 /* Keys-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-1.wav"; sourceTree = "<group>"; };
-		C1F5EEC52C13431900298B00 /* Keys-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-2.wav"; sourceTree = "<group>"; };
-		C1F5EEC62C13431900298B00 /* Keys-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-3.wav"; sourceTree = "<group>"; };
-		C1F5EEC72C13431900298B00 /* Keys-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-4.wav"; sourceTree = "<group>"; };
-		C1F5EEC82C13431900298B00 /* Keys-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-5.wav"; sourceTree = "<group>"; };
-		C1F5EEC92C13431900298B00 /* Keys-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-6.wav"; sourceTree = "<group>"; };
-		C1F5EECA2C13431900298B00 /* Keys-7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Keys-7.wav"; sourceTree = "<group>"; };
-		C1F5EECC2C13431900298B00 /* perc-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "perc-1.wav"; sourceTree = "<group>"; };
-		C1F5EECD2C13431900298B00 /* perc-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "perc-2.wav"; sourceTree = "<group>"; };
-		C1F5EECE2C13431900298B00 /* perc-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "perc-3.wav"; sourceTree = "<group>"; };
-		C1F5EECF2C13431900298B00 /* perc-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "perc-4.wav"; sourceTree = "<group>"; };
-		C1F5EED02C13431900298B00 /* perc-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "perc-5.wav"; sourceTree = "<group>"; };
-		C1F5EED12C13431900298B00 /* perc-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "perc-6.wav"; sourceTree = "<group>"; };
-		C1F5EED32C13431900298B00 /* vocals-1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-1.wav"; sourceTree = "<group>"; };
-		C1F5EED42C13431900298B00 /* vocals-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-2.wav"; sourceTree = "<group>"; };
-		C1F5EED52C13431900298B00 /* vocals-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-3.wav"; sourceTree = "<group>"; };
-		C1F5EED62C13431900298B00 /* vocals-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-4.wav"; sourceTree = "<group>"; };
-		C1F5EED72C13431900298B00 /* vocals-5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-5.wav"; sourceTree = "<group>"; };
-		C1F5EED82C13431900298B00 /* vocals-6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-6.wav"; sourceTree = "<group>"; };
-		C1F5EED92C13431900298B00 /* vocals-7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "vocals-7.wav"; sourceTree = "<group>"; };
 		C1F5EEE12C13446300298B00 /* Samples */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Samples; sourceTree = "<group>"; };
 		C1F5EEE42C14AE6F00298B00 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		C1F5EEE72C14AE9400298B00 /* BlockGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockGroup.swift; sourceTree = "<group>"; };
@@ -215,6 +173,7 @@
 				C1498E382C18881900118C38 /* CanvasModelTests.swift */,
 				C1498E3A2C18884A00118C38 /* BlockGroupTests.swift */,
 				C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */,
+				C19A08A22C963487008CCB0E /* LibraryTests.swift */,
 			);
 			path = LoopCanvasTests;
 			sourceTree = "<group>";
@@ -271,121 +230,11 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		C1F5EEAA2C13431900298B00 /* Bass */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EEA42C13431900298B00 /* Bass-3.wav */,
-				C1F5EEA52C13431900298B00 /* Bass-4.wav */,
-				C1F5EEA62C13431900298B00 /* Bass-5.wav */,
-				C1F5EEA72C13431900298B00 /* Bass-6.wav */,
-				C1F5EEA82C13431900298B00 /* Midi Bass-1.wav */,
-				C1F5EEA92C13431900298B00 /* Midi Bass-2.wav */,
-			);
-			path = Bass;
-			sourceTree = "<group>";
-		};
-		C1F5EEB22C13431900298B00 /* Drums */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EEAB2C13431900298B00 /* Drums-1.wav */,
-				C1F5EEAC2C13431900298B00 /* Drums-2.wav */,
-				C1F5EEAD2C13431900298B00 /* Drums-3.wav */,
-				C1F5EEAE2C13431900298B00 /* Drums-4.wav */,
-				C1F5EEAF2C13431900298B00 /* Drums-5.wav */,
-				C1F5EEB02C13431900298B00 /* Drums-6.wav */,
-				C1F5EEB12C13431900298B00 /* Drums-7.wav */,
-			);
-			path = Drums;
-			sourceTree = "<group>";
-		};
-		C1F5EEBA2C13431900298B00 /* Guitars */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EEB32C13431900298B00 /* guitar-1.wav */,
-				C1F5EEB42C13431900298B00 /* guitar-2.wav */,
-				C1F5EEB52C13431900298B00 /* guitar-3.wav */,
-				C1F5EEB62C13431900298B00 /* guitar-4.wav */,
-				C1F5EEB72C13431900298B00 /* guitar-5.wav */,
-				C1F5EEB82C13431900298B00 /* guitar-6.wav */,
-				C1F5EEB92C13431900298B00 /* guitar-7.wav */,
-			);
-			path = Guitars;
-			sourceTree = "<group>";
-		};
-		C1F5EEC32C13431900298B00 /* Horns */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EEBB2C13431900298B00 /* horns-1.wav */,
-				C1F5EEBC2C13431900298B00 /* horns-2.wav */,
-				C1F5EEBD2C13431900298B00 /* horns-3.wav */,
-				C1F5EEBE2C13431900298B00 /* horns-4.wav */,
-				C1F5EEBF2C13431900298B00 /* horns-5.wav */,
-				C1F5EEC02C13431900298B00 /* horns-6.wav */,
-				C1F5EEC12C13431900298B00 /* horns-7.wav */,
-				C1F5EEC22C13431900298B00 /* horns-8.wav */,
-			);
-			path = Horns;
-			sourceTree = "<group>";
-		};
-		C1F5EECB2C13431900298B00 /* Keyboards */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EEC42C13431900298B00 /* Keys-1.wav */,
-				C1F5EEC52C13431900298B00 /* Keys-2.wav */,
-				C1F5EEC62C13431900298B00 /* Keys-3.wav */,
-				C1F5EEC72C13431900298B00 /* Keys-4.wav */,
-				C1F5EEC82C13431900298B00 /* Keys-5.wav */,
-				C1F5EEC92C13431900298B00 /* Keys-6.wav */,
-				C1F5EECA2C13431900298B00 /* Keys-7.wav */,
-			);
-			path = Keyboards;
-			sourceTree = "<group>";
-		};
-		C1F5EED22C13431900298B00 /* Perc */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EECC2C13431900298B00 /* perc-1.wav */,
-				C1F5EECD2C13431900298B00 /* perc-2.wav */,
-				C1F5EECE2C13431900298B00 /* perc-3.wav */,
-				C1F5EECF2C13431900298B00 /* perc-4.wav */,
-				C1F5EED02C13431900298B00 /* perc-5.wav */,
-				C1F5EED12C13431900298B00 /* perc-6.wav */,
-			);
-			path = Perc;
-			sourceTree = "<group>";
-		};
-		C1F5EEDA2C13431900298B00 /* Vocals */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EED32C13431900298B00 /* vocals-1.wav */,
-				C1F5EED42C13431900298B00 /* vocals-2.wav */,
-				C1F5EED52C13431900298B00 /* vocals-3.wav */,
-				C1F5EED62C13431900298B00 /* vocals-4.wav */,
-				C1F5EED72C13431900298B00 /* vocals-5.wav */,
-				C1F5EED82C13431900298B00 /* vocals-6.wav */,
-				C1F5EED92C13431900298B00 /* vocals-7.wav */,
-			);
-			path = Vocals;
-			sourceTree = "<group>";
-		};
-		C1F5EEDB2C13431900298B00 /* DubSet */ = {
-			isa = PBXGroup;
-			children = (
-				C1F5EEAA2C13431900298B00 /* Bass */,
-				C1F5EEB22C13431900298B00 /* Drums */,
-				C1F5EEBA2C13431900298B00 /* Guitars */,
-				C1F5EEC32C13431900298B00 /* Horns */,
-				C1F5EECB2C13431900298B00 /* Keyboards */,
-				C1F5EED22C13431900298B00 /* Perc */,
-				C1F5EEDA2C13431900298B00 /* Vocals */,
-			);
-			path = DubSet;
-			sourceTree = "<group>";
-		};
 		C1F5EEDC2C13431900298B00 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
-				C1F5EEDB2C13431900298B00 /* DubSet */,
+				C19A089E2C962A06008CCB0E /* Dub */,
+				C19A089F2C962A06008CCB0E /* Funk */,
 			);
 			name = Samples;
 			path = LoopCanvas/Resources/Samples;
@@ -510,8 +359,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C19A08A12C962A06008CCB0E /* Funk in Resources */,
 				C1F5EEE22C13446300298B00 /* Samples in Resources */,
 				C19D85502C08AE6500477545 /* Preview Assets.xcassets in Resources */,
+				C19A08A02C962A06008CCB0E /* Dub in Resources */,
 				C19D854D2C08AE6500477545 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -583,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1F5EEE62C14AE6F00298B00 /* Block.swift in Sources */,
+				C19A08A32C963487008CCB0E /* LibraryTests.swift in Sources */,
 				C19D855A2C08AE6500477545 /* CanvasViewModelTests.swift in Sources */,
 				C1B564C62C0D243E002FDDD4 /* CanvasModel.swift in Sources */,
 				C1498E392C18881900118C38 /* CanvasModelTests.swift in Sources */,

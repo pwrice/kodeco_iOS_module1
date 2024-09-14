@@ -24,6 +24,7 @@ class CanvasStore: ObservableObject {
   )
 
   @Published var savedCanvases: [SavedCanvasModel] = []
+  @Published var sampleSetNames: [String] = []
 
   init() {
   }

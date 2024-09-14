@@ -30,6 +30,22 @@ struct LibraryView: View {
                 categoryName: viewModel.selectedCategoryName)
           }
         Spacer()
+        Text("Genres")
+        Picker(
+          "Library",
+          selection: $viewModel.selectedSampleSetName) {
+            ForEach(
+              viewModel.canvasModel.library.sampleSets.map { $0.name },
+              id: \.self) {
+                Text($0)
+            }
+        }.pickerStyle(.menu)
+          .onChange(
+            of: viewModel.selectedSampleSetName,
+            initial: false) { _, _ in
+              viewModel.loadSampleSetAndResetCanvas(
+                sampleSetName: viewModel.selectedSampleSetName)
+          }
       }
       HStack(spacing: CanvasViewModel.blockSpacing) {
         Spacer()

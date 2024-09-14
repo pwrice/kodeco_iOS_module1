@@ -125,7 +125,7 @@ final class CanvasViewModelTests: XCTestCase {
     canvasViewModel.canvasScrollOffset = scrollOffset
 
     // Drop second block below and to the right of the first block
-    // Note that the coordinates for the drop are offset by the new scroll position    
+    // Note that the coordinates for the drop are offset by the new scroll position
     let secondBlock = try dropLibraryBlockOnCanvas(
       libraryBlockIndex: 1,
       location: CGPoint(
@@ -405,6 +405,18 @@ final class CanvasViewModelTests: XCTestCase {
     XCTAssertEqual(newFirstBlock.location, origFirstBlock.location)
   }
 
+  func testSelectLoopCategory() throws {
+    // TODO
+  }
+
+  func testLoadSampleSetAndResetCanvas() throws {
+    // TODO
+  }
+}
+
+// Test Helpers
+
+extension CanvasViewModelTests {
   func dropLibraryBlockOnCanvas(libraryBlockIndex: Int, location: CGPoint) throws -> Block {
     let libraryBlock = try XCTUnwrap(canvasViewModel.canvasModel.library.allBlocks[libraryBlockIndex])
     canvasViewModel.updateBlockDragLocation(block: libraryBlock, location: location)
