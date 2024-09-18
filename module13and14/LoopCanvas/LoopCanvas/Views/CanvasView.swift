@@ -18,39 +18,37 @@ struct CanvasView: View {
   }
 
   var body: some View {
-    NavigationView {
-      ZStack {
-        ScrollView([.horizontal, .vertical]) {
-          ZStack {
-            BackgroundDots()
+    ZStack {
+      ScrollView([.horizontal, .vertical]) {
+        ZStack {
+          BackgroundDots()
 
-            canvasBlocksView
+          canvasBlocksView
 
-            GeometryReader { proxy in
-              let offset = proxy.frame(in: .named("CanvasCoordinateSpace")).origin
-              // This prefernces method to calculate the scroll offset
-              // seems a bit hacky. Is there a better way?
-              Color.clear.preference(
-                key: ViewOffsetKey.self,
-                value: CGPoint(x: offset.x, y: offset.y))
-            }
+          GeometryReader { proxy in
+            let offset = proxy.frame(in: .named("CanvasCoordinateSpace")).origin
+            // This prefernces method to calculate the scroll offset
+            // seems a bit hacky. Is there a better way?
+            Color.clear.preference(
+              key: ViewOffsetKey.self,
+              value: CGPoint(x: offset.x, y: offset.y))
           }
-          .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)
         }
-        .defaultScrollAnchor(.center)
-        .coordinateSpace(name: "CanvasCoordinateSpace")
-        .onPreferenceChange(ViewOffsetKey.self) {
-          viewModel.canvasScrollOffset = $0
-        }
-
-        UIOverlayView(viewModel: viewModel)
-
-        LibraryBlocksView(viewModel: viewModel)
+        .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)
       }
-      .coordinateSpace(name: "ViewportCoorindateSpace")
-      .onAppear {
-        viewModel.onViewAppear()
+      .defaultScrollAnchor(.center)
+      .coordinateSpace(name: "CanvasCoordinateSpace")
+      .onPreferenceChange(ViewOffsetKey.self) {
+        viewModel.canvasScrollOffset = $0
       }
+
+      UIOverlayView(viewModel: viewModel)
+
+      LibraryBlocksView(viewModel: viewModel)
+    }
+    .coordinateSpace(name: "ViewportCoorindateSpace")
+    .onAppear {
+      viewModel.onViewAppear()
     }
     .navigationBarItems(
       trailing: Menu {
@@ -211,12 +209,14 @@ struct UIOverlayView: View {
 
 struct CanvasView_Previews: PreviewProvider {
   static var previews: some View {
-    CanvasView(
-      viewModel: CanvasViewModel(
-        canvasModel: CanvasModel(),
-        musicEngine: MockMusicEngine(),
-        canvasStore: CanvasStore()
-      ))
+    NavigationView {
+      CanvasView(
+        viewModel: CanvasViewModel(
+          canvasModel: CanvasModel(),
+          musicEngine: MockMusicEngine(),
+          canvasStore: CanvasStore()
+        ))
+    }
   }
 }
 

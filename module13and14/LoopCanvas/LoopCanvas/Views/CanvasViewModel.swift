@@ -185,12 +185,17 @@ extension CanvasViewModel {
     canvasModel.library.setLoopCategory(categoryName: categoryName)
     updateAllBlocksList()
     syncBlockLocationsWithSlots()
+    for libraryBlock in canvasModel.library.allBlocks {
+      libraryBlock.visible = true
+    }
   }
 
   func loadSampleSetAndResetCanvas(sampleSetName: String) {
-    let freshCanvasModel = CanvasModel()
-    freshCanvasModel.library.name = sampleSetName
-    resetCanvasModel(newCanvasModel: freshCanvasModel)
+    if sampleSetName != canvasModel.library.name {
+      let freshCanvasModel = CanvasModel()
+      freshCanvasModel.library.name = sampleSetName
+      resetCanvasModel(newCanvasModel: freshCanvasModel)
+    }
   }
 }
 
