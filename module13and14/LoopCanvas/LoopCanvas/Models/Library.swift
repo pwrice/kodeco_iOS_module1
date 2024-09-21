@@ -27,12 +27,6 @@ class Category: ObservableObject, Identifiable {
   }
 }
 
-struct SampleSet: Hashable, Codable {
-  let name: String
-  let tempo: Double
-}
-
-
 class Library: ObservableObject, Codable {
   private static let logger = Logger(
     subsystem: "Models",
@@ -45,11 +39,11 @@ class Library: ObservableObject, Codable {
   @Published var categories: [Category] = []
   @Published var sampleSets: [SampleSet] = []
   var name: String
-  var tempo: Double = 80.0 // TODO - set this dynamically from a library JSON file
+  var tempo: Double = 120.0
 
   let maxCategories = 7
 
-  let samplesDirectory = "Samples/"
+  let sampleSetStore = SampleSetStore() // TODO - inject this from contructor
 
   init() {
     name = ""
@@ -99,48 +93,25 @@ class Library: ObservableObject, Codable {
   }
 
   func loadAvailableSampleSets() {
-    let fileManager = FileManager.default
-    let samplesDirectoryURL = URL(
-      fileURLWithPath: samplesDirectory,
-      relativeTo: Bundle.main.bundleURL)
-    var localSampleSets: [SampleSet] = []
-    do {
-      let sampleSetFolders = try fileManager.contentsOfDirectory(at: samplesDirectoryURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
-      for sampleSetFolderUrl in sampleSetFolders where sampleSetFolderUrl.hasDirectoryPath {
-        do {
-          let sampleSetJsonURL = URL(fileURLWithPath: "SampleSet.json", relativeTo: sampleSetFolderUrl)
-          let decoder = JSONDecoder()
-          let sampleSetJSONData = try Data(contentsOf: sampleSetJsonURL)
-          let sampleSet = try decoder.decode(SampleSet.self, from: sampleSetJSONData)
-          localSampleSets.append(sampleSet)
-        } catch {
-          Self.logger.error("Error loading library SampleSet.json from JSON \(error)")
-        }
-      }
-    } catch {
-      Self.logger.error("Error loading sampleSets from samples directory \(samplesDirectoryURL) \(error)")
-    }
-
-    sampleSets = localSampleSets
+    sampleSets = sampleSetStore.getLocalSampleSets()
   }
-
 
   func loadLibraryFrom(libraryFolderName: String) {
     name = libraryFolderName
     let fileManager = FileManager.default
     let libraryDirectoryURL = URL(
-      fileURLWithPath: samplesDirectory + libraryFolderName,
+      fileURLWithPath: sampleSetStore.samplesDirectory + libraryFolderName,
       relativeTo: Bundle.main.bundleURL)
 
     do {
-      let sampleSetJsonURL = URL(fileURLWithPath: "SampleSet.json", relativeTo: libraryDirectoryURL)
+      let sampleSetJsonURL = URL(fileURLWithPath: "SampleSetInfo.json", relativeTo: libraryDirectoryURL)
       let decoder = JSONDecoder()
       let sampleSetJSONData = try Data(contentsOf: sampleSetJsonURL)
       let sampleSet = try decoder.decode(SampleSet.self, from: sampleSetJSONData)
       name = sampleSet.name
       tempo = sampleSet.tempo
     } catch {
-      Self.logger.error("Error loading library SampleSet.json from JSON \(error)")
+      Self.logger.error("Error loading library SampleSetInfo.json from JSON \(error)")
     }
 
     do {
@@ -163,7 +134,7 @@ class Library: ObservableObject, Codable {
             color: categoryColor,
             icon: cateogryIcons[sampleInd % cateogryIcons.count],
             loopURL: URL(fileURLWithPath: sampleFile, relativeTo: categoryDirectoryURL),
-            relativePath: samplesDirectory + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
+            relativePath: sampleSetStore.samplesDirectory + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
             isLibraryBlock: true)
           blocks.append(block)
         }

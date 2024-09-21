@@ -28,6 +28,10 @@
 		C19D85642C08AE6500477545 /* LoopCanvasUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85632C08AE6500477545 /* LoopCanvasUITests.swift */; };
 		C19D85662C08AE6500477545 /* LoopCanvasUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85652C08AE6500477545 /* LoopCanvasUITestsLaunchTests.swift */; };
 		C19D85772C08B00C00477545 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19D85762C08B00C00477545 /* CanvasView.swift */; };
+		C1B150F92C9F102800B4FAE8 /* TestSampleSetIndex.json in Resources */ = {isa = PBXBuildFile; fileRef = C1B150F82C9F101C00B4FAE8 /* TestSampleSetIndex.json */; };
+		C1B150FB2C9F13A300B4FAE8 /* SampleSetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B150FA2C9F13A300B4FAE8 /* SampleSetStore.swift */; };
+		C1B150FC2C9F13A300B4FAE8 /* SampleSetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B150FA2C9F13A300B4FAE8 /* SampleSetStore.swift */; };
+		C1B150FE2C9F153900B4FAE8 /* SampleSetStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B150FD2C9F153900B4FAE8 /* SampleSetStoreTests.swift */; };
 		C1B564C52C0D243E002FDDD4 /* CanvasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B564C42C0D243E002FDDD4 /* CanvasModel.swift */; };
 		C1B564C62C0D243E002FDDD4 /* CanvasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B564C42C0D243E002FDDD4 /* CanvasModel.swift */; };
 		C1B564C82C0D25D0002FDDD4 /* CanvasViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B564C72C0D25D0002FDDD4 /* CanvasViewModel.swift */; };
@@ -86,6 +90,9 @@
 		C19D85632C08AE6500477545 /* LoopCanvasUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCanvasUITests.swift; sourceTree = "<group>"; };
 		C19D85652C08AE6500477545 /* LoopCanvasUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCanvasUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C19D85762C08B00C00477545 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		C1B150F82C9F101C00B4FAE8 /* TestSampleSetIndex.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestSampleSetIndex.json; sourceTree = "<group>"; };
+		C1B150FA2C9F13A300B4FAE8 /* SampleSetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleSetStore.swift; sourceTree = "<group>"; };
+		C1B150FD2C9F153900B4FAE8 /* SampleSetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleSetStoreTests.swift; sourceTree = "<group>"; };
 		C1B564C22C0CC77A002FDDD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C1B564C42C0D243E002FDDD4 /* CanvasModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasModel.swift; sourceTree = "<group>"; };
 		C1B564C72C0D25D0002FDDD4 /* CanvasViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewModel.swift; sourceTree = "<group>"; };
@@ -174,6 +181,7 @@
 				C1498E3A2C18884A00118C38 /* BlockGroupTests.swift */,
 				C15DCC922C6E3E4A0061453B /* CanvasStoreTests.swift */,
 				C19A08A22C963487008CCB0E /* LibraryTests.swift */,
+				C1B150FD2C9F153900B4FAE8 /* SampleSetStoreTests.swift */,
 			);
 			path = LoopCanvasTests;
 			sourceTree = "<group>";
@@ -195,6 +203,7 @@
 				C1F5EEE42C14AE6F00298B00 /* Block.swift */,
 				C1F5EEE72C14AE9400298B00 /* BlockGroup.swift */,
 				C1706DDC2C6CE5B700DAC858 /* CanvasStore.swift */,
+				C1B150FA2C9F13A300B4FAE8 /* SampleSetStore.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -233,6 +242,7 @@
 		C1F5EEDC2C13431900298B00 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
+				C1B150F82C9F101C00B4FAE8 /* TestSampleSetIndex.json */,
 				C19A089E2C962A06008CCB0E /* Dub */,
 				C19A089F2C962A06008CCB0E /* Funk */,
 			);
@@ -362,6 +372,7 @@
 				C19A08A12C962A06008CCB0E /* Funk in Resources */,
 				C1F5EEE22C13446300298B00 /* Samples in Resources */,
 				C19D85502C08AE6500477545 /* Preview Assets.xcassets in Resources */,
+				C1B150F92C9F102800B4FAE8 /* TestSampleSetIndex.json in Resources */,
 				C19A08A02C962A06008CCB0E /* Dub in Resources */,
 				C19D854D2C08AE6500477545 /* Assets.xcassets in Resources */,
 			);
@@ -421,6 +432,7 @@
 				C13BCD9B2C4C12380037AEF4 /* RenameSongSheet.swift in Sources */,
 				C19D85492C08AE5900477545 /* LoopCanvasApp.swift in Sources */,
 				C19D85772C08B00C00477545 /* CanvasView.swift in Sources */,
+				C1B150FB2C9F13A300B4FAE8 /* SampleSetStore.swift in Sources */,
 				C12C6E8D2C2AFA7700B01C58 /* PlaceHolderView.swift in Sources */,
 				C1F5EEEC2C14C64100298B00 /* MusicEngine.swift in Sources */,
 				C12C6E8B2C2AF39300B01C58 /* HomeView.swift in Sources */,
@@ -436,8 +448,10 @@
 				C1F5EEE62C14AE6F00298B00 /* Block.swift in Sources */,
 				C19A08A32C963487008CCB0E /* LibraryTests.swift in Sources */,
 				C19D855A2C08AE6500477545 /* CanvasViewModelTests.swift in Sources */,
+				C1B150FC2C9F13A300B4FAE8 /* SampleSetStore.swift in Sources */,
 				C1B564C62C0D243E002FDDD4 /* CanvasModel.swift in Sources */,
 				C1498E392C18881900118C38 /* CanvasModelTests.swift in Sources */,
+				C1B150FE2C9F153900B4FAE8 /* SampleSetStoreTests.swift in Sources */,
 				C1498E3B2C18884A00118C38 /* BlockGroupTests.swift in Sources */,
 				C15DCC932C6E3E4A0061453B /* CanvasStoreTests.swift in Sources */,
 				C15DCC912C6E32430061453B /* CanvasStore.swift in Sources */,

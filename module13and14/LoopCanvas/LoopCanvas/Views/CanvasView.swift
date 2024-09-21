@@ -242,8 +242,8 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE]- build all songs view
 
 
-// - add new genre's of music
-// - add ability to switch genres
+// [DONE]- add new genre's of music
+// [DONE]- add ability to switch genres
 // - add ability to download genres from server
 
 // Update tests for library behavior
