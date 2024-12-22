@@ -37,7 +37,7 @@ class Library: ObservableObject, Codable {
   @Published var libaryFrame: CGRect
   @Published var currentCategory: Category?
   @Published var categories: [Category] = []
-  @Published var sampleSets: [SampleSet] = []
+  @Published var sampleSets: [LocalSampleSet] = []
   var name: String
   var tempo: Double = 120.0
 
@@ -100,14 +100,14 @@ class Library: ObservableObject, Codable {
     name = libraryFolderName
     let fileManager = FileManager.default
     let libraryDirectoryURL = URL(
-      fileURLWithPath: sampleSetStore.samplesDirectory + libraryFolderName,
+      fileURLWithPath: sampleSetStore.localSamplesDirectory + libraryFolderName,
       relativeTo: Bundle.main.bundleURL)
 
     do {
       let sampleSetJsonURL = URL(fileURLWithPath: "SampleSetInfo.json", relativeTo: libraryDirectoryURL)
       let decoder = JSONDecoder()
       let sampleSetJSONData = try Data(contentsOf: sampleSetJsonURL)
-      let sampleSet = try decoder.decode(SampleSet.self, from: sampleSetJSONData)
+      let sampleSet = try decoder.decode(LocalSampleSet.self, from: sampleSetJSONData)
       name = sampleSet.name
       tempo = sampleSet.tempo
     } catch {
@@ -134,7 +134,7 @@ class Library: ObservableObject, Codable {
             color: categoryColor,
             icon: cateogryIcons[sampleInd % cateogryIcons.count],
             loopURL: URL(fileURLWithPath: sampleFile, relativeTo: categoryDirectoryURL),
-            relativePath: sampleSetStore.samplesDirectory + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
+            relativePath: sampleSetStore.localSamplesDirectory + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
             isLibraryBlock: true)
           blocks.append(block)
         }

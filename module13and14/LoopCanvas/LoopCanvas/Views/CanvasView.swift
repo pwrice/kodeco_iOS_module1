@@ -12,6 +12,7 @@ import ImageIO
 struct CanvasView: View {
   @StateObject var viewModel: CanvasViewModel
   @State var showingRenameSongView = false
+  @State var showingDownloadGenresView = false
 
   var canvasBlocksView: some View {
     CanvasBlocksView(viewModel: viewModel)
@@ -52,7 +53,7 @@ struct CanvasView: View {
     }
     .navigationBarItems(
       trailing: Menu {
-        Button("Rename") {
+        Button("Rename ...") {
           if let snapshotImage = snapshot(snapshotView: canvasBlocksView) {
             viewModel.canvasSnapshot = snapshotImage
             showingRenameSongView = true
@@ -70,17 +71,23 @@ struct CanvasView: View {
             viewModel.saveSong()
           }
         }
-        Button("Load") {
+        Button("Reload") {
           viewModel.loadSong()
         }
         Button("Clear Canvas") {
           viewModel.clearCanvas()
+        }
+        Button("Download Genres ...") {
+          showingDownloadGenresView = true
         }
       } label: {
         Image(systemName: "ellipsis.circle")
       })
     .sheet(isPresented: $showingRenameSongView, content: {
       RenameSongSheet(viewModel: viewModel, showingRenameSongView: $showingRenameSongView)
+    })
+    .sheet(isPresented: $showingDownloadGenresView, content: {
+      DownloadGenresSheet(store: viewModel.canvasModel.library.sampleSetStore, showingDownloadGenresView: $showingDownloadGenresView)
     })
   }
 
@@ -245,6 +252,13 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE]- add new genre's of music
 // [DONE]- add ability to switch genres
 // - add ability to download genres from server
+// [DONE]-- add download genre view
+// [DONE]-- adding loading state spinner when getting initial response
+// -- mark genres as downloaded or not downloaded
+// --- add button to remove download (and add stub calls for remove download functionality)
+// -- upload full genres files to S3
+// -- implement background downloader w progress
+// -- display progress is genre download sheet
 
 // Update tests for library behavior
 // context tap to select block

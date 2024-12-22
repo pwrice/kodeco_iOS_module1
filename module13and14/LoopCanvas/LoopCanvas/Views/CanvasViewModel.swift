@@ -98,6 +98,7 @@ extension CanvasViewModel {
       for libraryBlock in canvasModel.library.allBlocks {
         libraryBlock.visible = false
       }
+      canvasModel.library.loadAvailableSampleSets()
       updateAllBlocksList()
     }
 

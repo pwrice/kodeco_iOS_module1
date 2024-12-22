@@ -1,0 +1,116 @@
+{
+  "sampleSets": [
+    {
+      "name": "Dub",
+      "url": "SampleSetInfo.json",
+      "tempo": 80,
+      "categories": [
+        {
+          "name": "Bass",
+          "loops": [
+            {
+              "url": "Bass/Bass-3.wav"
+            },
+            {
+              "url": "Bass/Bass-4.wav"
+            },
+            {
+              "url": "Bass/Bass-5.wav"
+            },
+            {
+              "url": "Bass/Bass-6.wav"
+            },
+            {
+              "url": "Bass/Midi Bass-1.wav"
+            },
+            {
+              "url": "Bass/Midi Bass-2.wav"
+            }
+          ]
+        },
+        {
+          "name": "Drums",
+          "loops": [
+            {
+              "url": "Drums/Drums-1.wav"
+            },
+            {
+              "url": "Drums/Drums-2.wav"
+            },
+            {
+              "url": "Drums/Drums-3.wav"
+            },
+            {
+              "url": "Drums/Drums-4.wav"
+            },
+            {
+              "url": "Drums/Drums-5.wav"
+            },
+            {
+              "url": "Drums/Drums-6.wav"
+            },
+            {
+              "url": "Drums/Drums-7.wav"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TestDub",
+      "url": "SampleSetInfo.json",
+      "tempo": 80,
+      "categories": [
+        {
+          "name": "Bass",
+          "loops": [
+            {
+              "url": "Bass/Bass-3.wav"
+            },
+            {
+              "url": "Bass/Bass-4.wav"
+            },
+            {
+              "url": "Bass/Bass-5.wav"
+            },
+            {
+              "url": "Bass/Bass-6.wav"
+            },
+            {
+              "url": "Bass/Midi Bass-1.wav"
+            },
+            {
+              "url": "Bass/Midi Bass-2.wav"
+            }
+          ]
+        },
+        {
+          "name": "Drums",
+          "loops": [
+            {
+              "url": "Drums/Drums-1.wav"
+            },
+            {
+              "url": "Drums/Drums-2.wav"
+            },
+            {
+              "url": "Drums/Drums-3.wav"
+            },
+            {
+              "url": "Drums/Drums-4.wav"
+            },
+            {
+              "url": "Drums/Drums-5.wav"
+            },
+            {
+              "url": "Drums/Drums-6.wav"
+            },
+            {
+              "url": "Drums/Drums-7.wav"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
