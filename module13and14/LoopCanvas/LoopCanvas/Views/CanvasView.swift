@@ -87,7 +87,7 @@ struct CanvasView: View {
       RenameSongSheet(viewModel: viewModel, showingRenameSongView: $showingRenameSongView)
     })
     .sheet(isPresented: $showingDownloadGenresView, content: {
-      DownloadGenresSheet(store: viewModel.canvasModel.library.sampleSetStore, showingDownloadGenresView: $showingDownloadGenresView)
+      DownloadGenresSheet(store: viewModel.sampleSetStore, showingDownloadGenresView: $showingDownloadGenresView)
     })
   }
 

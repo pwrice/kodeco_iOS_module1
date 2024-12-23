@@ -103,7 +103,7 @@ class SampleSetStore: ObservableObject {
     }
   }
 
-  func getLocalSampleSets() -> [LocalSampleSet] {
+  func loadLocalSampleSets() {
     let fileManager = FileManager.default
     let samplesDirectoryURL = URL(
       fileURLWithPath: localSamplesDirectory,
@@ -130,8 +130,6 @@ class SampleSetStore: ObservableObject {
     }
 
     self.localSampleSets = localSampleSets
-
-    return localSampleSets
   }
 
   func downloadRemoteSampleSet(_ remoteSampleSet: DownloadableSampleSet) {
@@ -143,7 +141,7 @@ class SampleSetStore: ObservableObject {
   func removeLocalSampleSet(_ remoteSampleSet: DownloadableSampleSet) {
     remoteSampleSet.removeSampleSetDownload()
     // Update published LocalSampleSets
-    getLocalSampleSets()
+    loadLocalSampleSets()
   }
 
   func processRemoteSampleSetIndexResponse(data: Data?, response: URLResponse?, error: Error?) {

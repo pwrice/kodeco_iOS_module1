@@ -67,9 +67,10 @@ final class SampleSetStoreTests: XCTestCase {
     XCTAssertEqual(dubSampleSet.remoteSampleSet.tempo, 80)
   }
 
-  func testGetLocalSampleSets() throws {
+  func testLoadLocalSampleSets() throws {
     let store = SampleSetStore()
-    let sampleSets = store.getLocalSampleSets()
+    store.loadLocalSampleSets()
+    let sampleSets = store.localSampleSets
     XCTAssertEqual(sampleSets.count, 2)
     let dubSampleSet = try XCTUnwrap(sampleSets.first { $0.name == "Dub" })
     XCTAssertEqual(dubSampleSet.tempo, 80)

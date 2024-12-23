@@ -73,8 +73,8 @@ class CanvasViewModel: ObservableObject {
     musicEngine.stop()
     canvasModel.cleanup()
 
+    sampleSetStore.loadLocalSampleSets()
     canvasModel = newCanvasModel
-    canvasModel.library.loadAvailableSampleSets()
     canvasModel.library.loadLibraryFrom(libraryFolderName: canvasModel.library.name)
     musicEngine.tempo = canvasModel.library.tempo
     Self.logger.debug("Setting music engine tempo to: \(self.musicEngine.tempo)")
@@ -106,7 +106,7 @@ extension CanvasViewModel {
       for libraryBlock in canvasModel.library.allBlocks {
         libraryBlock.visible = false
       }
-      canvasModel.library.loadAvailableSampleSets()
+      sampleSetStore.loadLocalSampleSets()
       updateAllBlocksList()
     }
 

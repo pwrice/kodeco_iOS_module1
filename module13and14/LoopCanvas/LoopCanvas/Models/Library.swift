@@ -126,10 +126,6 @@ class Library: ObservableObject {
     }
   }
 
-  func loadAvailableSampleSets() {
-    sampleSetStore.getLocalSampleSets()
-  }
-
   func loadLibraryFrom(libraryFolderName: String) {
     name = libraryFolderName
     let fileManager = FileManager.default
