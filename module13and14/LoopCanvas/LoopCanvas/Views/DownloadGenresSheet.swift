@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DownloadGenresSheet: View {
+  let viewModel: CanvasViewModel
   @ObservedObject var store: SampleSetStore
   @Binding var showingDownloadGenresView: Bool
 
@@ -18,7 +19,7 @@ struct DownloadGenresSheet: View {
           ProgressView()
         } else if store.remoteSampleSetIndexLoadingState == .loaded {
           List(store.downloadableSampleSets) { sampleSet in
-            SampleSetRowView(sampleSet: sampleSet, store: store)
+            SampleSetRowView(viewModel: viewModel, sampleSet: sampleSet)
           }
           .listStyle(.plain)
         } else if store.remoteSampleSetIndexLoadingState == .error {
@@ -40,24 +41,25 @@ struct DownloadGenresSheet: View {
 }
 
 struct SampleSetRowView: View {
+  let viewModel: CanvasViewModel
   @ObservedObject var sampleSet: DownloadableSampleSet
-  let store: SampleSetStore
 
   var body: some View {
     HStack {
       Text(sampleSet.remoteSampleSet.name)
         .bold()
       Spacer()
-      if sampleSet.loadingState == .loaded {
+      if sampleSet.loadingState == .loaded
+        && viewModel.selectedSampleSetName != sampleSet.remoteSampleSet.name {
         Button(action: {
-          store.removeLocalSampleSet(sampleSet)
+          viewModel.removeLocalSampleSet(sampleSet)
         }, label: {
           Text("Remove Download")
         })
         .buttonStyle(.borderless)
       } else if sampleSet.loadingState == .notLoaded || sampleSet.loadingState == .error {
         Button(action: {
-          store.downloadRemoteSampleSet(sampleSet)
+          viewModel.downloadRemoteSampleSet(sampleSet)
         }, label: {
           Text("Download")
         })
@@ -72,7 +74,16 @@ struct SampleSetRowView: View {
 
 struct DownloadGenresSheet_Previews: PreviewProvider {
   static var previews: some View {
+    let sampleSetStore = SampleSetStore(withMockResults: "Samples/SampleSetIndex.json")
+    let viewModel = CanvasViewModel(
+      canvasModel: CanvasModel(sampleSetStore: sampleSetStore),
+      musicEngine: MockMusicEngine(),
+      canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
+      sampleSetStore: sampleSetStore
+    )
+
     DownloadGenresSheet(
+      viewModel: viewModel,
       store: SampleSetStore(withMockResults: "Samples/SampleSetIndex.json"),
       showingDownloadGenresView: .constant(true))
   }

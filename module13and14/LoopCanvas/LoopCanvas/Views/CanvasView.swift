@@ -87,7 +87,7 @@ struct CanvasView: View {
       RenameSongSheet(viewModel: viewModel, showingRenameSongView: $showingRenameSongView)
     })
     .sheet(isPresented: $showingDownloadGenresView, content: {
-      DownloadGenresSheet(store: viewModel.sampleSetStore, showingDownloadGenresView: $showingDownloadGenresView)
+      DownloadGenresSheet(viewModel: viewModel, store: viewModel.sampleSetStore, showingDownloadGenresView: $showingDownloadGenresView)
     })
   }
 
@@ -219,14 +219,15 @@ struct UIOverlayView: View {
 struct CanvasView_Previews: PreviewProvider {
   static var previews: some View {
     let sampleSetStore = SampleSetStore()
+    let viewModel = CanvasViewModel(
+      canvasModel: CanvasModel(sampleSetStore: sampleSetStore),
+      musicEngine: MockMusicEngine(),
+      canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
+      sampleSetStore: sampleSetStore
+    )
     NavigationView {
       CanvasView(
-        viewModel: CanvasViewModel(
-          canvasModel: CanvasModel(sampleSetStore: sampleSetStore),
-          musicEngine: MockMusicEngine(),
-          canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
-          sampleSetStore: sampleSetStore
-        ))
+        viewModel: viewModel)
     }
   }
 }
@@ -263,6 +264,20 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE]-- upload full genres files to S3
 // [DONE]-- implement background downloader w progress
 // [DONE]-- display progress is genre download sheet
+// [DONE]-- fix bug where library blocks appear on canvas during initial transition
+// [DONE]-- fix bug where you can delete currently playing genre
+
+
+// Capstone project requirements
+// -- handle network errors gracefully (toast?)
+// -- make app work in landscape and portrait mode
+// -- make app work in light and dark mode
+// -- add SwiftUI animation somewhere
+// -- find a place to add tab navigation
+// -- add UI tests
+
+// Add more comprehensive tests (+ view model refactoring to make this easier)
+
 
 // Update tests for library behavior
 // context tap to select block

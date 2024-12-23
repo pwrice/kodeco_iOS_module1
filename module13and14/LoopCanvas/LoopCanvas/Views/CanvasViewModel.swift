@@ -191,6 +191,10 @@ extension CanvasViewModel {
   }
 
   func selectLoopCategory(categoryName: String) {
+    guard let currentCategoryName = canvasModel.library.currentCategory?.name, categoryName != currentCategoryName else {
+      return
+    }
+
     canvasModel.library.setLoopCategory(categoryName: categoryName)
     updateAllBlocksList()
     syncBlockLocationsWithSlots()
@@ -230,6 +234,20 @@ extension CanvasViewModel {
   func loadSong() {
     if let canvasModel = canvasStore.loadCanvas(name: canvasModel.name) {
       resetCanvasModel(newCanvasModel: canvasModel)
+    }
+  }
+}
+
+// Sampleset managmeent events
+
+extension CanvasViewModel {
+  func downloadRemoteSampleSet(_ remoteSampleSet: DownloadableSampleSet) {
+    sampleSetStore.downloadRemoteSampleSet(remoteSampleSet)
+  }
+
+  func removeLocalSampleSet(_ remoteSampleSet: DownloadableSampleSet) {
+    if selectedSampleSetName != remoteSampleSet.remoteSampleSet.name {
+      sampleSetStore.removeLocalSampleSet(remoteSampleSet)
     }
   }
 }
