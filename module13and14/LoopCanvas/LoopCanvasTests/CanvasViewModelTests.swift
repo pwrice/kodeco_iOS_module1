@@ -12,11 +12,13 @@ final class CanvasViewModelTests: XCTestCase {
   var canvasViewModel: CanvasViewModel!
   var musicEngine: MockMusicEngine!
   var canvasStore: CanvasStore!
+  var sampleSetStore: SampleSetStore!
 
   override func setUpWithError() throws {
     musicEngine = MockMusicEngine()
-    canvasStore = CanvasStore()
-    canvasViewModel = CanvasViewModel(canvasModel: CanvasModel(), musicEngine: musicEngine, canvasStore: canvasStore)
+    sampleSetStore = SampleSetStore()
+    canvasStore = CanvasStore(sampleSetStore: sampleSetStore)
+    canvasViewModel = CanvasViewModel(canvasModel: CanvasModel(sampleSetStore: sampleSetStore), musicEngine: musicEngine, canvasStore: canvasStore, sampleSetStore: sampleSetStore)
     canvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "Dub")
     canvasViewModel.syncBlockLocationsWithSlots()
     canvasViewModel.updateAllBlocksList()
@@ -380,9 +382,11 @@ final class CanvasViewModelTests: XCTestCase {
 
     // Create a new canvas view model with an empty canvas
     let newCanvasViewModel = CanvasViewModel(
-      canvasModel: CanvasModel(),
+      canvasModel: CanvasModel(sampleSetStore: sampleSetStore),
       musicEngine: musicEngine,
-      canvasStore: canvasStore)
+      canvasStore: canvasStore,
+      sampleSetStore: sampleSetStore
+    )
     newCanvasViewModel.canvasModel.library.loadLibraryFrom(libraryFolderName: "Dub")
     newCanvasViewModel.syncBlockLocationsWithSlots()
     newCanvasViewModel.updateAllBlocksList()

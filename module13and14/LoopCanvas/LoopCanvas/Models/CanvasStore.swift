@@ -22,15 +22,17 @@ class CanvasStore: ObservableObject {
     subsystem: "Models",
     category: String(describing: CanvasStore.self)
   )
+  let sampleSetStore: SampleSetStore
 
   @Published var savedCanvases: [SavedCanvasModel] = []
-  @Published var sampleSetNames: [String] = []
 
-  init() {
+  init(sampleSetStore: SampleSetStore) {
+    self.sampleSetStore = sampleSetStore
   }
 
-  init(savedCanvases: [SavedCanvasModel]) {
+  init(savedCanvases: [SavedCanvasModel], sampleSetStore: SampleSetStore) {
     self.savedCanvases = savedCanvases
+    self.sampleSetStore = sampleSetStore
   }
 
   func reloadSavedCanvases() {
@@ -116,7 +118,7 @@ class CanvasStore: ObservableObject {
 
     let encoder = JSONEncoder()
     do {
-      let canvasJSONData = try encoder.encode(canvasModel)
+      let canvasJSONData = try encoder.encode(canvasModel.data)
       try canvasJSONData.write(to: jsonFileURL, options: .atomicWrite)
       Self.logger.info("writing canvas to \(jsonFileURL)")
     } catch {
@@ -160,7 +162,8 @@ class CanvasStore: ObservableObject {
         return nil
       }
       let canvasJSONData = try Data(contentsOf: jsonFileURL)
-      let canvasModel = try decoder.decode(CanvasModel.self, from: canvasJSONData)
+      let canvasModelData = try decoder.decode(CanvasModelData.self, from: canvasJSONData)
+      let canvasModel = CanvasModel(data: canvasModelData, sampleSetStore: sampleSetStore)
 
       if FileManager.default.fileExists(atPath: thumbnailURL.path) {
         let imageData = try Data(contentsOf: thumbnailURL)

@@ -27,7 +27,29 @@ class Category: ObservableObject, Identifiable {
   }
 }
 
-class Library: ObservableObject, Codable {
+class LibraryData: Codable {
+  var name: String
+
+  enum CodingKeys: String, CodingKey {
+    case name
+  }
+
+  init(name: String) {
+    self.name = name
+  }
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    name = try container.decode(String.self, forKey: .name)
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(name, forKey: .name)
+  }
+}
+
+class Library: ObservableObject {
   private static let logger = Logger(
     subsystem: "Models",
     category: String(describing: Library.self)
@@ -37,20 +59,32 @@ class Library: ObservableObject, Codable {
   @Published var libaryFrame: CGRect
   @Published var currentCategory: Category?
   @Published var categories: [Category] = []
-  @Published var sampleSets: [LocalSampleSet] = []
+
   var name: String
   var tempo: Double = 120.0
 
   let maxCategories = 7
 
-  let sampleSetStore = SampleSetStore() // TODO - inject this from contructor
+  let sampleSetStore: SampleSetStore
 
-  init() {
+  var data: LibraryData {
+    LibraryData(name: name)
+  }
+
+  init(sampleSetStore: SampleSetStore) {
     name = ""
+    self.sampleSetStore = sampleSetStore
     self.allBlocks = []
 
     // this will be reset by the geometry reader
     self.libaryFrame = CGRect(x: 0, y: 800, width: 400, height: 200)
+  }
+
+  init(libraryData: LibraryData, sampleSetStore: SampleSetStore) {
+    name = libraryData.name
+    self.sampleSetStore = sampleSetStore
+    self.allBlocks = []
+    self.libaryFrame = CGRect.zero
   }
 
   func syncBlockLocationsWithSlots(librarySlotLocations: [CGPoint]) {
@@ -93,7 +127,7 @@ class Library: ObservableObject, Codable {
   }
 
   func loadAvailableSampleSets() {
-    sampleSets = sampleSetStore.getLocalSampleSets()
+    sampleSetStore.getLocalSampleSets()
   }
 
   func loadLibraryFrom(libraryFolderName: String) {
@@ -149,24 +183,5 @@ class Library: ObservableObject, Codable {
 
   func removeBlock(block: Block) {
     allBlocks.removeAll { $0.id == block.id }
-  }
-
-  // Codable implementation
-
-  enum CodingKeys: String, CodingKey {
-    case id,
-         name
-  }
-
-  required init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    name = try container.decode(String.self, forKey: .name)
-    self.allBlocks = []
-    self.libaryFrame = CGRect.zero
-  }
-
-  func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    try container.encode(name, forKey: .name)
   }
 }

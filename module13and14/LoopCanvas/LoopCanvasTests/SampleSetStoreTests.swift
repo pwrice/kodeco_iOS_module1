@@ -12,14 +12,11 @@ import Combine
 final class SampleSetStoreTests: XCTestCase {
   var cancellables: Set<AnyCancellable> = []
 
-  override func setUp() {
-    super.setUp()
-  }
-
   override func tearDown() {
     cancellables.removeAll()
     super.tearDown()
   }
+
   func testLoadRemoteSampleSetIndex() throws {
     let expectation = self.expectation(
       description: "Waiting for remoteSampleSetIndexLoadingState to change"
@@ -82,6 +79,13 @@ final class SampleSetStoreTests: XCTestCase {
 }
 
 final class DownloadableSampleSetTests: XCTestCase {
+  var cancellables: Set<AnyCancellable> = []
+
+  override func tearDown() {
+    cancellables.removeAll()
+    super.tearDown()
+  }
+
   func testDownloadableSampleSetInitialState() throws {
     let dubSampleSet = try getDownloadableSampleSetFromMockSampleSetIndex()
     XCTAssertEqual(dubSampleSet.remoteSampleSet.tempo, 80)
@@ -95,7 +99,7 @@ final class DownloadableSampleSetTests: XCTestCase {
     let dubSampleSet = try getDownloadableSampleSetFromMockSampleSetIndex()
 
     let urlPairs = dubSampleSet.getRemoteAndLocalURLPairs()
-    XCTAssertEqual(urlPairs.count, 14)
+    XCTAssertEqual(urlPairs.count, 49)
     XCTAssertEqual(urlPairs[0].0.path, "/Samples/Dub/SampleSetInfo.json")
     XCTAssertEqual(
       urlPairs[0].1.path,
@@ -145,6 +149,11 @@ final class DownloadableSampleSetTests: XCTestCase {
 
 extension DownloadableSampleSetTests {
   private func getDownloadableSampleSetFromMockSampleSetIndex() throws -> DownloadableSampleSet {
+    let expectation = self.expectation(
+      description: "Waiting for remoteSampleSetIndexLoadingState to change"
+    )
+    var observedStates: [RemoteSampleSetIndexLoadingState] = []
+
     let mockJSONURL = URL(
       fileURLWithPath: "Samples/SampleSetIndex.json",
       relativeTo: Bundle.main.bundleURL)
@@ -160,8 +169,19 @@ extension DownloadableSampleSetTests {
       mockError: nil)
 
     let store = SampleSetStore(urlSessionLoader: mockUrlSessionLoader)
+
+    store.$remoteSampleSetIndexLoadingState
+      .sink { newState in
+        observedStates.append(newState)
+        if newState == .loaded || newState == .error {
+          expectation.fulfill()
+        }
+      }
+      .store(in: &cancellables)
+
     store.loadRemoteSampleSetIndex()
     mockUrlSessionLoader.resolveCompletionHandler()
+    wait(for: [expectation], timeout: 1.0)
 
     store.loadRemoteSampleSetIndex()
     let sampleSets = try XCTUnwrap(store.downloadableSampleSets)

@@ -9,13 +9,14 @@ import SwiftUI
 
 struct SongListView: View {
   @ObservedObject var canvasStore: CanvasStore
+  let sampleSetStore: SampleSetStore
   let screenName: String
 
   var body: some View {
     VStack {
       ScrollView {
         VStack {
-          CanvasesGridView(store: canvasStore)
+          CanvasesGridView(canvasStore: canvasStore, sampleSetStore: sampleSetStore)
         }
       }
       .navigationTitle(Text(screenName))
@@ -27,7 +28,8 @@ struct SongListView: View {
 }
 
 struct CanvasesGridView: View {
-  @ObservedObject var store: CanvasStore
+  @ObservedObject var canvasStore: CanvasStore
+  let sampleSetStore: SampleSetStore
 
   var resultColumns: [GridItem] {
     [
@@ -38,7 +40,7 @@ struct CanvasesGridView: View {
 
   var body: some View {
     LazyVGrid(columns: resultColumns) {
-      ForEach(store.savedCanvases) { savedCanvas in
+      ForEach(canvasStore.savedCanvases) { savedCanvas in
         NavigationLink(value: savedCanvas) {
           SavedCanvasView(savedCanvasModel: savedCanvas)
         }
@@ -46,9 +48,12 @@ struct CanvasesGridView: View {
     }
     .navigationDestination(for: SavedCanvasModel.self) { savedCanvas in
       let canvasViewModel = CanvasViewModel(
-        canvasModel: CanvasModel(),
+        canvasModel: CanvasModel(
+          sampleSetStore: sampleSetStore
+        ),
         musicEngine: AudioKitMusicEngine(),
-        canvasStore: store,
+        canvasStore: canvasStore,
+        sampleSetStore: sampleSetStore,
         songNameToLoad: savedCanvas.name)
       CanvasView(viewModel: canvasViewModel)
     }
@@ -78,6 +83,7 @@ struct SavedCanvasView: View {
 
 struct SongListView_Previews: PreviewProvider {
   static var previews: some View {
+    let sampleSetStore = SampleSetStore()
     NavigationStack {
       SongListView(
         canvasStore: CanvasStore(
@@ -102,7 +108,9 @@ struct SongListView_Previews: PreviewProvider {
               index: 4,
               name: "Test Canvas 5",
               thumnail: UIImage(systemName: "photo")!)
-          ]),
+          ],
+          sampleSetStore: sampleSetStore),
+        sampleSetStore: sampleSetStore,
         screenName: "All Songs"
       )
     }

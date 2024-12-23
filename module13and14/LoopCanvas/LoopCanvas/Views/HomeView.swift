@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
-  @StateObject var canvasStore = CanvasStore()
+  @StateObject var canvasStore = CanvasStore(
+    sampleSetStore: SampleSetStore()
+  )
 
   enum HomeViewLinks {
     case newSong
@@ -52,12 +54,18 @@ struct HomeView: View {
         switch linkValue {
         case .newSong:
           let canvasViewModel = CanvasViewModel(
-            canvasModel: CanvasModel(),
+            canvasModel: CanvasModel(
+              sampleSetStore: canvasStore.sampleSetStore),
             musicEngine: AudioKitMusicEngine(),
-            canvasStore: canvasStore)
+            canvasStore: canvasStore,
+            sampleSetStore: canvasStore.sampleSetStore
+          )
           CanvasView(viewModel: canvasViewModel)
         case .allSongs:
-          SongListView(canvasStore: canvasStore, screenName: "All Songs")
+          SongListView(
+            canvasStore: canvasStore,
+            sampleSetStore: canvasStore.sampleSetStore,
+            screenName: "All Songs")
         default:
           PlaceHolderView()
         }

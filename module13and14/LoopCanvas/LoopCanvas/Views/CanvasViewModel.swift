@@ -17,6 +17,7 @@ class CanvasViewModel: ObservableObject {
 
   let musicEngine: MusicEngine
   let canvasStore: CanvasStore
+  let sampleSetStore: SampleSetStore
 
   @Published var canvasModel: CanvasModel
   @Published var allBlocks: [Block]
@@ -35,7 +36,13 @@ class CanvasViewModel: ObservableObject {
   static let canvasWidth: CGFloat = 1000.0
   static let canvasHeight: CGFloat = 1000.0
 
-  init(canvasModel: CanvasModel, musicEngine: MusicEngine, canvasStore: CanvasStore, songNameToLoad: String? = nil) {
+  init(
+    canvasModel: CanvasModel,
+    musicEngine: MusicEngine,
+    canvasStore: CanvasStore,
+    sampleSetStore: SampleSetStore,
+    songNameToLoad: String? = nil
+  ) {
     self.librarySlotLocations = [
       CGPoint(x: 50, y: 150),
       CGPoint(x: 150, y: 150),
@@ -50,6 +57,7 @@ class CanvasViewModel: ObservableObject {
     self.musicEngine = musicEngine
     self.canvasModel = canvasModel
     self.canvasStore = canvasStore
+    self.sampleSetStore = sampleSetStore
 
     self.allBlocks = []
     self.libraryBlocks = []
@@ -193,7 +201,7 @@ extension CanvasViewModel {
 
   func loadSampleSetAndResetCanvas(sampleSetName: String) {
     if sampleSetName != canvasModel.library.name {
-      let freshCanvasModel = CanvasModel()
+      let freshCanvasModel = CanvasModel(sampleSetStore: sampleSetStore)
       freshCanvasModel.library.name = sampleSetName
       resetCanvasModel(newCanvasModel: freshCanvasModel)
     }

@@ -53,11 +53,14 @@ struct RenameSongSheet: View {
 
 struct RenameSongSheet_Previews: PreviewProvider {
   static var previews: some View {
+    let sampleSetStore = SampleSetStore()
     RenameSongSheet(
       viewModel: CanvasViewModel(
-        canvasModel: CanvasModel(),
+        canvasModel: CanvasModel(
+          sampleSetStore: sampleSetStore),
         musicEngine: MockMusicEngine(),
-        canvasStore: CanvasStore()
+        canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
+        sampleSetStore: sampleSetStore
       ),
       showingRenameSongView: .constant(true))
   }

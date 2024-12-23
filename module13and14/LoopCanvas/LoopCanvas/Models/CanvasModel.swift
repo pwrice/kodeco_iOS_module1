@@ -9,21 +9,81 @@ import Foundation
 import SwiftUI
 import os
 
-class CanvasModel: ObservableObject, Codable {
+class CanvasModelData: Codable {
+  private static let logger = Logger(
+    subsystem: "Models",
+    category: String(describing: CanvasModelData.self)
+  )
+
+  var name: String
+  var blocksGroups: [BlockGroup]
+  var libraryData: LibraryData
+
+  enum CodingKeys: String, CodingKey {
+    case name
+    case blocksGroups
+    case library
+  }
+
+  init(name: String, blocksGroups: [BlockGroup], libraryData: LibraryData) {
+    self.name = name
+    self.blocksGroups = blocksGroups
+    self.libraryData = libraryData
+  }
+
+  required init(from decoder: Decoder) throws {
+    do {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+      name = try container.decode(String.self, forKey: .name)
+      blocksGroups = try container.decode([BlockGroup].self, forKey: .blocksGroups)
+      libraryData = try container.decode(LibraryData.self, forKey: .library)
+    } catch {
+      Self.logger.error("CanvasModelData decode error \(error)")
+      throw error
+    }
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(name, forKey: .name)
+    try container.encode(blocksGroups, forKey: .blocksGroups)
+    try container.encode(libraryData, forKey: .library)
+  }
+}
+
+class CanvasModel: ObservableObject {
   private static let logger = Logger(
     subsystem: "Models",
     category: String(describing: CanvasModel.self)
   )
 
   var musicEngine: MusicEngine?
+  let sampleSetStore: SampleSetStore
 
   @Published var name: String = "MySong"
   @Published var thumnail: UIImage?
 
   @Published var blocksGroups: [BlockGroup] = []
-  @Published var library = Library()
+  @Published var library: Library
 
-  init() {
+  var data: CanvasModelData {
+    return CanvasModelData(
+      name: name,
+      blocksGroups: blocksGroups,
+      libraryData: library.data
+    )
+  }
+
+  init(sampleSetStore: SampleSetStore) {
+    self.sampleSetStore = sampleSetStore
+    library = Library(sampleSetStore: sampleSetStore)
+  }
+
+  init(data: CanvasModelData, sampleSetStore: SampleSetStore) {
+    name = data.name
+    blocksGroups = data.blocksGroups
+    library = Library(libraryData: data.libraryData, sampleSetStore: sampleSetStore)
+    self.sampleSetStore = sampleSetStore
   }
 
   func cleanup() {
@@ -134,33 +194,6 @@ class CanvasModel: ObservableObject, Codable {
     }
 
     return false
-  }
-
-  // Codable implementation
-
-  enum CodingKeys: String, CodingKey {
-    case name
-    case blocksGroups
-    case library
-  }
-
-  required init(from decoder: Decoder) throws {
-    do {
-      let container = try decoder.container(keyedBy: CodingKeys.self)
-      name = try container.decode(String.self, forKey: .name)
-      blocksGroups = try container.decode([BlockGroup].self, forKey: .blocksGroups)
-      library = try container.decode(Library.self, forKey: .library)
-    } catch {
-      Self.logger.error("CanvasModel decode error \(error)")
-      throw error
-    }
-  }
-
-  func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    try container.encode(name, forKey: .name)
-    try container.encode(blocksGroups, forKey: .blocksGroups)
-    try container.encode(library, forKey: .library)
   }
 }
 

@@ -208,7 +208,9 @@ struct UIOverlayView: View {
   var body: some View {
     VStack {
       Spacer()
-      LibraryView(viewModel: viewModel)
+      LibraryView(
+        viewModel: viewModel,
+        sampleSetStore: viewModel.sampleSetStore)
     }
   }
 }
@@ -216,12 +218,14 @@ struct UIOverlayView: View {
 
 struct CanvasView_Previews: PreviewProvider {
   static var previews: some View {
+    let sampleSetStore = SampleSetStore()
     NavigationView {
       CanvasView(
         viewModel: CanvasViewModel(
-          canvasModel: CanvasModel(),
+          canvasModel: CanvasModel(sampleSetStore: sampleSetStore),
           musicEngine: MockMusicEngine(),
-          canvasStore: CanvasStore()
+          canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
+          sampleSetStore: sampleSetStore
         ))
     }
   }
@@ -251,14 +255,14 @@ struct CanvasView_Previews: PreviewProvider {
 
 // [DONE]- add new genre's of music
 // [DONE]- add ability to switch genres
-// - add ability to download genres from server
+// [DONE]- add ability to download genres from server
 // [DONE]-- add download genre view
 // [DONE]-- adding loading state spinner when getting initial response
-// -- mark genres as downloaded or not downloaded
-// --- add button to remove download (and add stub calls for remove download functionality)
-// -- upload full genres files to S3
-// -- implement background downloader w progress
-// -- display progress is genre download sheet
+// [DONE]-- mark genres as downloaded or not downloaded
+// [DONE]-- add button to remove download (and add stub calls for remove download functionality)
+// [DONE]-- upload full genres files to S3
+// [DONE]-- implement background downloader w progress
+// [DONE]-- display progress is genre download sheet
 
 // Update tests for library behavior
 // context tap to select block

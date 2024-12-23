@@ -15,13 +15,15 @@ final class CanvasStoreTests: XCTestCase {
   )
 
   var canvasStore: CanvasStore!
+  var sampleSetStore: SampleSetStore!
 
   override func setUpWithError() throws {
-    canvasStore = CanvasStore()
+    sampleSetStore = SampleSetStore()
+    canvasStore = CanvasStore(sampleSetStore: sampleSetStore)
   }
 
   func testSaveAndLoadSong() throws {
-    let canvasModel = CanvasModel()
+    let canvasModel = CanvasModel(sampleSetStore: sampleSetStore)
     canvasModel.setMusicEngineAfterLoad(musicEngine: MockMusicEngine())
     canvasModel.name = "CANVAS_STORE_TEST_CANVAS"
     canvasModel.thumnail = UIImage(systemName: "photo")
@@ -54,7 +56,7 @@ final class CanvasStoreTests: XCTestCase {
   }
 
   func testGetSavedCanvases() throws {
-    let canvasModel = CanvasModel()
+    let canvasModel = CanvasModel(sampleSetStore: sampleSetStore)
     canvasModel.setMusicEngineAfterLoad(musicEngine: MockMusicEngine())
     canvasModel.name = "CANVAS_STORE_TEST_CANVAS"
     canvasModel.thumnail = UIImage(systemName: "photo")

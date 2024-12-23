@@ -54,8 +54,7 @@ class SampleSetStore: ObservableObject {
 
   @Published var remoteSampleSetIndexLoadingState = RemoteSampleSetIndexLoadingState.notLoaded
   @Published var downloadableSampleSets: [DownloadableSampleSet] = []
-
-  var localSampleSets: [LocalSampleSet] = []
+  @Published var localSampleSets: [LocalSampleSet] = []
 
   let remoteSampleSetS3Path = "https://loopcanvas.s3.amazonaws.com/Samples/"
   let localSamplesDirectory = "Samples/"
@@ -143,6 +142,8 @@ class SampleSetStore: ObservableObject {
 
   func removeLocalSampleSet(_ remoteSampleSet: DownloadableSampleSet) {
     remoteSampleSet.removeSampleSetDownload()
+    // Update published LocalSampleSets
+    getLocalSampleSets()
   }
 
   func processRemoteSampleSetIndexResponse(data: Data?, response: URLResponse?, error: Error?) {
@@ -156,7 +157,6 @@ class SampleSetStore: ObservableObject {
         let sampleSetIndex = try decoder.decode(RemoteSampleSetIndex.self, from: data)
         let sampleSets = augmentRemoteSampleSetsWithDownloadedState(sampleSetIndex.sampleSets)
 
-        // TODO fix test caused by putting this in main actor (probably need to add expectation to the test)
         Task { @MainActor in
           downloadableSampleSets = sampleSets
           remoteSampleSetIndexLoadingState = .loaded
@@ -185,7 +185,7 @@ class SampleSetStore: ObservableObject {
     return sampleSets.map { sampleSet in
       DownloadableSampleSet(
         remoteSampleSet: sampleSet,
-        loadingState: .notLoaded,// localSampleSets.contains { $0.name == sampleSet.name } ? .loaded : .notLoaded,
+        loadingState: localSampleSets.contains { $0.name == sampleSet.name } ? .loaded : .notLoaded,
         baseSampleSetsRemoteURL: baseSampleSetsRemoteURL,
         baseSampleSetsLocalURL: samplesDirectoryURL
       )

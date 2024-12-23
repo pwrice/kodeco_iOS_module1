@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryView: View {
   @ObservedObject var viewModel: CanvasViewModel
+  @ObservedObject var sampleSetStore: SampleSetStore
 
   var body: some View {
     VStack {
@@ -35,7 +36,7 @@ struct LibraryView: View {
           "Library",
           selection: $viewModel.selectedSampleSetName) {
             ForEach(
-              viewModel.canvasModel.library.sampleSets.map { $0.name },
+              sampleSetStore.localSampleSets.map { $0.name },
               id: \.self) {
                 Text($0)
             }

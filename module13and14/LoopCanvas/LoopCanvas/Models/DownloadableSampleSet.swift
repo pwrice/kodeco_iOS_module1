@@ -10,9 +10,9 @@ import os
 
 enum DownloadableSampleSetLoadingState {
   case notLoaded,
-   loading,
-   loaded,
-   error
+    loading,
+    loaded,
+    error
 }
 
 
