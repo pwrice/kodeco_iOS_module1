@@ -50,18 +50,42 @@ struct LibraryView: View {
       }
       HStack(spacing: CanvasViewModel.blockSpacing) {
         Spacer()
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 0)
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 1)
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 2)
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 3)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 0,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 1,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 2,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 3,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
         Spacer()
       }
       HStack(spacing: CanvasViewModel.blockSpacing) {
         Spacer()
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 4)
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 5)
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 6)
-        LibrarySlotView(librarySlotLocations: $viewModel.librarySlotLocations, index: 7)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 4,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 5,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 6,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
+        LibrarySlotView(
+          librarySlotLocations: $viewModel.librarySlotLocations,
+          index: 7,
+          isLandscapeOrientation: viewModel.isLandscapeOrientation)
         Spacer()
       }
     }
@@ -79,6 +103,16 @@ struct LibraryView: View {
           viewModel.libraryBlockLocationsUpdated()
         }
       }
+      .onChange(of: viewModel.isLandscapeOrientation) {
+        let updatedFrame = metrics.frame(in: .named("ViewportCoorindateSpace"))
+        if updatedFrame != viewModel.canvasModel.library.libaryFrame {
+          Task {
+            try await Task.sleep(for: .seconds(0.15))
+            viewModel.canvasModel.library.libaryFrame = metrics.frame(in: .named("ViewportCoorindateSpace"))
+            viewModel.libraryBlockLocationsUpdated()
+          }
+        }
+      }
     }
     )
   }
@@ -87,6 +121,7 @@ struct LibraryView: View {
 struct LibrarySlotView: View {
   @Binding var librarySlotLocations: [CGPoint]
   let index: Int
+  let isLandscapeOrientation: Bool
 
   var body: some View {
     ZStack {
@@ -96,6 +131,16 @@ struct LibrarySlotView: View {
           .onAppear {
             Task {
               // We need to wait a beat apparently for the UI to update when coming in from the navigation controller
+              try await Task.sleep(for: .seconds(0.1))
+
+              self.librarySlotLocations[index] = CGPoint(
+                x: metrics.frame(in: .named("ViewportCoorindateSpace")).midX,
+                y: metrics.frame(in: .named("ViewportCoorindateSpace")).midY
+              )
+            }
+          }
+          .onChange(of: isLandscapeOrientation) {
+            Task {
               try await Task.sleep(for: .seconds(0.1))
 
               self.librarySlotLocations[index] = CGPoint(

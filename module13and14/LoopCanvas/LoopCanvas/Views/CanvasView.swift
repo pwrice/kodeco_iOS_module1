@@ -225,9 +225,21 @@ struct CanvasView_Previews: PreviewProvider {
       canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
       sampleSetStore: sampleSetStore
     )
-    NavigationView {
-      CanvasView(
-        viewModel: viewModel)
+
+    // Portrait Preview
+    Group {
+      NavigationView {
+        CanvasView(viewModel: viewModel)
+      }
+      .previewDisplayName("Portrait Mode")
+      .previewInterfaceOrientation(.portrait)
+
+      // Landscape Preview
+      NavigationView {
+        CanvasView(viewModel: viewModel)
+      }
+      .previewDisplayName("Landscape Mode")
+      .previewInterfaceOrientation(.landscapeLeft)
     }
   }
 }
@@ -267,10 +279,15 @@ struct CanvasView_Previews: PreviewProvider {
 // [DONE]-- fix bug where library blocks appear on canvas during initial transition
 // [DONE]-- fix bug where you can delete currently playing genre
 
+// Refactor all views so they easily work with preview w/ mock data
+
 
 // Capstone project requirements
 // -- handle network errors gracefully (toast?)
 // -- make app work in landscape and portrait mode
+//   -- make library blocks reset location on rotation
+//   -- make library 1 row of blocks
+//   -- test
 // -- make app work in light and dark mode
 // -- add SwiftUI animation somewhere
 // -- find a place to add tab navigation

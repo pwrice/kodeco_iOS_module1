@@ -5,6 +5,7 @@
 //  Created by Peter Rice on 6/2/24.
 //
 
+import Combine
 import Foundation
 import SwiftUI
 import os
@@ -36,6 +37,9 @@ class CanvasViewModel: ObservableObject {
   static let canvasWidth: CGFloat = 1000.0
   static let canvasHeight: CGFloat = 1000.0
 
+  private var orienttationCancellable: AnyCancellable?
+  @Published var isLandscapeOrientation: Bool = UIDevice.current.orientation.isLandscape
+
   init(
     canvasModel: CanvasModel,
     musicEngine: MusicEngine,
@@ -63,6 +67,14 @@ class CanvasViewModel: ObservableObject {
     self.libraryBlocks = []
     self.canvasModel.musicEngine = musicEngine
     musicEngine.delegate = canvasModel
+
+    orienttationCancellable = NotificationCenter.default
+      .publisher(for: UIDevice.orientationDidChangeNotification)
+      .sink { _ in
+        self.isLandscapeOrientation = UIDevice.current.orientation.isLandscape
+//        self.libraryBlockLocationsUpdated()
+//        Self.logger.debug("orientation change libraryBlockLocationsUpdated()")
+      }
 
     self.updateAllBlocksList()
 
