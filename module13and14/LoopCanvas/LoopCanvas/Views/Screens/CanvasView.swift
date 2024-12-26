@@ -226,8 +226,8 @@ struct CanvasView_Previews: PreviewProvider {
       sampleSetStore: sampleSetStore
     )
 
-    // Portrait Preview
     Group {
+      // Portrait Preview
       NavigationView {
         CanvasView(viewModel: viewModel)
       }
@@ -285,9 +285,12 @@ struct CanvasView_Previews: PreviewProvider {
 // Capstone project requirements
 // -- handle network errors gracefully (toast?)
 // -- make app work in landscape and portrait mode
-//   -- make library blocks reset location on rotation
-//   -- make library 1 row of blocks
-//   -- test
+//    -- canvas view
+//   [DONE]-- make library blocks reset location on rotation
+//   [DONE]-- make library 1 row of blocks
+//     -- make portrait mode work upside-down
+//   [DONE]-- home view
+//   -- 
 // -- make app work in light and dark mode
 // -- add SwiftUI animation somewhere
 // -- find a place to add tab navigation
