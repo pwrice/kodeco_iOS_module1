@@ -14,13 +14,20 @@ struct SongListView: View {
 
   var body: some View {
     VStack {
-      ScrollView {
-        VStack {
-          CanvasesGridView(canvasStore: canvasStore, sampleSetStore: sampleSetStore)
+      if canvasStore.savedCanvases.isEmpty {
+        Spacer()
+        Text("No saved songs yet")
+        Spacer()
+        Spacer()
+      } else {
+        ScrollView {
+          VStack {
+            CanvasesGridView(canvasStore: canvasStore, sampleSetStore: sampleSetStore)
+          }
         }
       }
-      .navigationTitle(Text(screenName))
     }
+    .navigationTitle(Text(screenName))
     .onAppear {
       canvasStore.reloadSavedCanvases()
     }
@@ -115,10 +122,23 @@ struct SongListView_Previews: PreviewProvider {
             debugSavedCanvases: savedCanvases,
             sampleSetStore: sampleSetStore),
           sampleSetStore: sampleSetStore,
-          screenName: "All Songs"
+          screenName: "Saved Songs"
         )
       }
       .previewDisplayName("Portrait Mode")
+      .previewInterfaceOrientation(.portrait)
+
+      // Portrait Preview No Songs
+      NavigationStack {
+        SongListView(
+          canvasStore: CanvasStore(
+            debugSavedCanvases: [],
+            sampleSetStore: sampleSetStore),
+          sampleSetStore: sampleSetStore,
+          screenName: "Saved Songs"
+        )
+      }
+      .previewDisplayName("Portrait Mode - No Songs")
       .previewInterfaceOrientation(.portrait)
 
       NavigationStack {
@@ -127,7 +147,7 @@ struct SongListView_Previews: PreviewProvider {
             debugSavedCanvases: savedCanvases,
             sampleSetStore: sampleSetStore),
           sampleSetStore: sampleSetStore,
-          screenName: "All Songs"
+          screenName: "Saved Songs"
         )
       }
       .previewDisplayName("Portrait - Dark Mode")
@@ -141,7 +161,7 @@ struct SongListView_Previews: PreviewProvider {
             debugSavedCanvases: savedCanvases,
             sampleSetStore: sampleSetStore),
           sampleSetStore: sampleSetStore,
-          screenName: "All Songs"
+          screenName: "Saved Songs"
         )
       }
       .previewDisplayName("Landscape Mode")

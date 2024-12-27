@@ -31,10 +31,11 @@ struct HomeView: View {
         }
         NavigationLink(value: HomeViewLinks.allSongs) {
           HStack {
-            Text("All Songs")
+            Text("Saved Songs")
               .foregroundColor(Color("TextLabelColor"))
           }
         }
+        /*  TODO - implement these screens eventually
         NavigationLink(value: HomeViewLinks.recents) {
           HStack {
             Text("Recents")
@@ -53,6 +54,7 @@ struct HomeView: View {
               .foregroundColor(Color("TextLabelColor"))
           }
         }
+         */
       }
       .navigationTitle(Text("Loop Canvas"))
       .navigationDestination(for: HomeViewLinks.self) { linkValue in
@@ -70,7 +72,7 @@ struct HomeView: View {
           SongListView(
             canvasStore: canvasStore,
             sampleSetStore: canvasStore.sampleSetStore,
-            screenName: "All Songs")
+            screenName: "Saved Songs")
         default:
           PlaceHolderView()
         }
