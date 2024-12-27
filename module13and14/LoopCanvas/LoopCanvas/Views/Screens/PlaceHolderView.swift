@@ -13,6 +13,25 @@ struct PlaceHolderView: View {
   }
 }
 
-#Preview {
-  PlaceHolderView()
+
+struct PlaceHolderView_Previews: PreviewProvider {
+  static var previews: some View {
+    Group {
+      // Portrait Preview
+      PlaceHolderView()
+      .previewDisplayName("Portrait Mode")
+      .previewInterfaceOrientation(.portrait)
+
+      // Portrait Dark Mode
+      PlaceHolderView()
+      .previewDisplayName("Portrait - Dark Mode")
+      .previewInterfaceOrientation(.portrait)
+      .preferredColorScheme(.dark)
+
+      // Landscape Preview
+      PlaceHolderView()
+      .previewDisplayName("Landscape Mode")
+      .previewInterfaceOrientation(.landscapeLeft)
+    }
+  }
 }

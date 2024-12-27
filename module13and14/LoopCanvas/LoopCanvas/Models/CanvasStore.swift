@@ -25,18 +25,24 @@ class CanvasStore: ObservableObject {
   let sampleSetStore: SampleSetStore
 
   @Published var savedCanvases: [SavedCanvasModel] = []
+  var debugSavedCanvases: [SavedCanvasModel]?
 
   init(sampleSetStore: SampleSetStore) {
     self.sampleSetStore = sampleSetStore
   }
 
-  init(savedCanvases: [SavedCanvasModel], sampleSetStore: SampleSetStore) {
-    self.savedCanvases = savedCanvases
+  init(debugSavedCanvases: [SavedCanvasModel], sampleSetStore: SampleSetStore) {
+    self.debugSavedCanvases = debugSavedCanvases
+    self.savedCanvases = debugSavedCanvases
     self.sampleSetStore = sampleSetStore
   }
 
   func reloadSavedCanvases() {
-    savedCanvases = getSavedCanvases()
+    if let debugSavedCanvases = debugSavedCanvases {
+      savedCanvases = debugSavedCanvases
+    } else {
+      savedCanvases = getSavedCanvases()
+    }
   }
 
   func getSavedCanvases() -> [SavedCanvasModel] {

@@ -56,6 +56,8 @@ class SampleSetStore: ObservableObject {
   @Published var downloadableSampleSets: [DownloadableSampleSet] = []
   @Published var localSampleSets: [LocalSampleSet] = []
 
+  var usingMockResults = false
+
   let remoteSampleSetS3Path = "https://loopcanvas.s3.amazonaws.com/Samples/"
   let localSamplesDirectory = "Samples/"
   var baseSampleSetsRemoteURL: URL? {
@@ -80,6 +82,7 @@ class SampleSetStore: ObservableObject {
 
     loadRemoteSampleSetIndex()
     mockUrlSessionLoader.resolveCompletionHandler()
+    usingMockResults = true
   }
 
 
@@ -88,6 +91,11 @@ class SampleSetStore: ObservableObject {
   }
 
   func loadRemoteSampleSetIndex() {
+    if usingMockResults {
+      // When using mock results, ignore calls to reload sampleset index
+      remoteSampleSetIndexLoadingState = .loaded
+      return
+    }
     guard let baseUrl = baseSampleSetsRemoteURL else {
       Self.logger.error("Error constructing baseUrl from \(self.remoteSampleSetS3Path)")
       remoteSampleSetIndexLoadingState = .error

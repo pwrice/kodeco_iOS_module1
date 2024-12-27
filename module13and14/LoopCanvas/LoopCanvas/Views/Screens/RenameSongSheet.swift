@@ -54,14 +54,37 @@ struct RenameSongSheet: View {
 struct RenameSongSheet_Previews: PreviewProvider {
   static var previews: some View {
     let sampleSetStore = SampleSetStore()
-    RenameSongSheet(
-      viewModel: CanvasViewModel(
-        canvasModel: CanvasModel(
-          sampleSetStore: sampleSetStore),
-        musicEngine: MockMusicEngine(),
-        canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
-        sampleSetStore: sampleSetStore
-      ),
-      showingRenameSongView: .constant(true))
+    let viewModel = CanvasViewModel(
+      canvasModel: CanvasModel(
+        sampleSetStore: sampleSetStore),
+      musicEngine: MockMusicEngine(),
+      canvasStore: CanvasStore(sampleSetStore: sampleSetStore),
+      sampleSetStore: sampleSetStore
+    )
+
+
+    Group {
+      // Portrait Preview
+      RenameSongSheet(
+        viewModel: viewModel,
+        showingRenameSongView: .constant(true))
+      .previewDisplayName("Portrait Mode")
+      .previewInterfaceOrientation(.portrait)
+
+      // Portrait Dark Mode
+      RenameSongSheet(
+        viewModel: viewModel,
+        showingRenameSongView: .constant(true))
+      .previewDisplayName("Portrait - Dark Mode")
+      .previewInterfaceOrientation(.portrait)
+      .preferredColorScheme(.dark)
+
+      // Landscape Preview
+      RenameSongSheet(
+        viewModel: viewModel,
+        showingRenameSongView: .constant(true))
+      .previewDisplayName("Landscape Mode")
+      .previewInterfaceOrientation(.landscapeLeft)
+    }
   }
 }

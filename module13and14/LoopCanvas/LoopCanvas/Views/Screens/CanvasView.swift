@@ -234,6 +234,14 @@ struct CanvasView_Previews: PreviewProvider {
       .previewDisplayName("Portrait Mode")
       .previewInterfaceOrientation(.portrait)
 
+      // Portrait Dark Mode
+      NavigationView {
+        CanvasView(viewModel: viewModel)
+      }
+      .previewDisplayName("Portrait - Dark Mode")
+      .previewInterfaceOrientation(.portrait)
+      .preferredColorScheme(.dark)
+
       // Landscape Preview
       NavigationView {
         CanvasView(viewModel: viewModel)
@@ -290,7 +298,10 @@ struct CanvasView_Previews: PreviewProvider {
 //   [DONE]-- make library 1 row of blocks
 //     -- make portrait mode work upside-down
 //   [DONE]-- home view
-//   -- 
+//   [DONE]-- song list view
+//   [DONE]-- download genres sheet
+//   [DONE]-- rename song sheet
+//   [DONE]-- place holder view
 // -- make app work in light and dark mode
 // -- add SwiftUI animation somewhere
 // -- find a place to add tab navigation

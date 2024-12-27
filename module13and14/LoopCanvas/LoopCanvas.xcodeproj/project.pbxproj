@@ -221,15 +221,8 @@
 		C19D85742C08AF2400477545 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C1B150FF2C9F4BF100B4FAE8 /* DownloadGenresSheet.swift */,
-				C19D85762C08B00C00477545 /* CanvasView.swift */,
-				C1B564C72C0D25D0002FDDD4 /* CanvasViewModel.swift */,
-				C12C6E862C2AF29500B01C58 /* LibraryView.swift */,
-				C12C6E882C2AF2E200B01C58 /* BlockView.swift */,
-				C12C6E8A2C2AF39300B01C58 /* HomeView.swift */,
-				C12C6E8C2C2AFA7700B01C58 /* PlaceHolderView.swift */,
-				C13BCD9A2C4C12380037AEF4 /* RenameSongSheet.swift */,
-				C1706DDA2C6CE4E000DAC858 /* SongListView.swift */,
+				C1E5D1812D1DCD870021D803 /* SubViews */,
+				C1E5D1802D1DCD430021D803 /* Screens */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -240,6 +233,29 @@
 				C19D85482C08AE5900477545 /* LoopCanvasApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		C1E5D1802D1DCD430021D803 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				C1706DDA2C6CE4E000DAC858 /* SongListView.swift */,
+				C13BCD9A2C4C12380037AEF4 /* RenameSongSheet.swift */,
+				C12C6E8C2C2AFA7700B01C58 /* PlaceHolderView.swift */,
+				C12C6E8A2C2AF39300B01C58 /* HomeView.swift */,
+				C1B564C72C0D25D0002FDDD4 /* CanvasViewModel.swift */,
+				C19D85762C08B00C00477545 /* CanvasView.swift */,
+				C1B150FF2C9F4BF100B4FAE8 /* DownloadGenresSheet.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		C1E5D1812D1DCD870021D803 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				C12C6E862C2AF29500B01C58 /* LibraryView.swift */,
+				C12C6E882C2AF2E200B01C58 /* BlockView.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		C1F5EE372C1337BE00298B00 /* Resources */ = {

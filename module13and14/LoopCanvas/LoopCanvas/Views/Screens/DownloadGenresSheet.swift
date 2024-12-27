@@ -82,9 +82,31 @@ struct DownloadGenresSheet_Previews: PreviewProvider {
       sampleSetStore: sampleSetStore
     )
 
-    DownloadGenresSheet(
-      viewModel: viewModel,
-      store: SampleSetStore(withMockResults: "Samples/SampleSetIndex.json"),
-      showingDownloadGenresView: .constant(true))
+    Group {
+      // Portrait Preview
+      DownloadGenresSheet(
+        viewModel: viewModel,
+        store: sampleSetStore,
+        showingDownloadGenresView: .constant(true))
+      .previewDisplayName("Portrait Mode")
+      .previewInterfaceOrientation(.portrait)
+
+      // Portrait Dark Mode
+      DownloadGenresSheet(
+        viewModel: viewModel,
+        store: sampleSetStore,
+        showingDownloadGenresView: .constant(true))
+      .previewDisplayName("Portrait - Dark Mode")
+      .previewInterfaceOrientation(.portrait)
+      .preferredColorScheme(.dark)
+
+      // Landscape Preview
+      DownloadGenresSheet(
+        viewModel: viewModel,
+        store: sampleSetStore,
+        showingDownloadGenresView: .constant(true))
+      .previewDisplayName("Landscape Mode")
+      .previewInterfaceOrientation(.landscapeLeft)
+    }
   }
 }

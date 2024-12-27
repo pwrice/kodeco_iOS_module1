@@ -82,6 +82,12 @@ struct HomeView_Previews: PreviewProvider {
       .previewDisplayName("Portrait Mode")
       .previewInterfaceOrientation(.portrait)
 
+      // Portrait Dark Mode
+      HomeView()
+      .previewDisplayName("Portrait - Dark Mode")
+      .previewInterfaceOrientation(.portrait)
+      .preferredColorScheme(.dark)
+
       // Landscape Preview
       HomeView()
       .previewDisplayName("Landscape Mode")
