@@ -26,26 +26,31 @@ struct HomeView: View {
         NavigationLink(value: HomeViewLinks.newSong) {
           HStack {
             Text("New Song")
+              .foregroundColor(Color("TextLabelColor"))
           }
         }
         NavigationLink(value: HomeViewLinks.allSongs) {
           HStack {
             Text("All Songs")
+              .foregroundColor(Color("TextLabelColor"))
           }
         }
         NavigationLink(value: HomeViewLinks.recents) {
           HStack {
             Text("Recents")
+              .foregroundColor(Color("TextLabelColor"))
           }
         }
         NavigationLink(value: HomeViewLinks.shared) {
           HStack {
             Text("Shared")
+              .foregroundColor(Color("TextLabelColor"))
           }
         }
         NavigationLink(value: HomeViewLinks.favorites) {
           HStack {
             Text("Favorites")
+              .foregroundColor(Color("TextLabelColor"))
           }
         }
       }

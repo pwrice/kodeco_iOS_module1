@@ -2,8 +2,13 @@
   "colors" : [
     {
       "color" : {
-        "platform" : "ios",
-        "reference" : "linkColor"
+        "color-space" : "display-p3",
+        "components" : {
+          "alpha" : "1.000",
+          "blue" : "0xC3",
+          "green" : "0xC4",
+          "red" : "0x8A"
+        }
       },
       "idiom" : "universal"
     },
@@ -18,9 +23,9 @@
         "color-space" : "display-p3",
         "components" : {
           "alpha" : "1.000",
-          "blue" : "0.967",
-          "green" : "0.797",
-          "red" : "0.688"
+          "blue" : "0x4F",
+          "green" : "0x52",
+          "red" : "0x25"
         }
       },
       "idiom" : "universal"

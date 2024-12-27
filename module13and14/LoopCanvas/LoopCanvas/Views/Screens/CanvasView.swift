@@ -35,6 +35,7 @@ struct CanvasView: View {
               value: CGPoint(x: offset.x, y: offset.y))
           }
         }
+        .background(Color("CanvasBackgroundColor"))
         .frame(width: CanvasViewModel.canvasWidth, height: CanvasViewModel.canvasWidth)
       }
       .defaultScrollAnchor(.center)
@@ -87,7 +88,10 @@ struct CanvasView: View {
       RenameSongSheet(viewModel: viewModel, showingRenameSongView: $showingRenameSongView)
     })
     .sheet(isPresented: $showingDownloadGenresView, content: {
-      DownloadGenresSheet(viewModel: viewModel, store: viewModel.sampleSetStore, showingDownloadGenresView: $showingDownloadGenresView)
+      DownloadGenresSheet(
+        viewModel: viewModel,
+        store: viewModel.sampleSetStore,
+        showingDownloadGenresView: $showingDownloadGenresView)
     })
   }
 

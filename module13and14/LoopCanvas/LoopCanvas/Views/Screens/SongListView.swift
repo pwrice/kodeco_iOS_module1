@@ -22,7 +22,7 @@ struct SongListView: View {
       .navigationTitle(Text(screenName))
     }
     .onAppear {
-      //      canvasStore.reloadSavedCanvases()
+      canvasStore.reloadSavedCanvases()
     }
   }
 }
@@ -75,7 +75,7 @@ struct SavedCanvasView: View {
       Spacer()
     }
     .padding(5)
-    .background(.white)
+    .background(Color("SavedCanvasBackgroundColor"))
     .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.33), radius: 10, x: 0, y: 5)
   }
 }

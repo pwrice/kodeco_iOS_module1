@@ -15,6 +15,7 @@ struct LibraryView: View {
     VStack {
       HStack {
         Text("Loops")
+          .foregroundColor(Color("TextLabelColor"))
         Picker(
           "Category",
           selection: $viewModel.selectedCategoryName) {
@@ -22,8 +23,10 @@ struct LibraryView: View {
               viewModel.canvasModel.library.categories.map { $0.name },
               id: \.self) {
                 Text($0)
+                  .foregroundColor(Color("TextLabelColor"))
             }
         }.pickerStyle(.menu)
+          .foregroundColor(.white)
           .onChange(
             of: viewModel.selectedCategoryName,
             initial: false) { _, _ in
@@ -32,6 +35,7 @@ struct LibraryView: View {
           }
         Spacer()
         Text("Genres")
+          .foregroundColor(Color("TextLabelColor"))
         Picker(
           "Library",
           selection: $viewModel.selectedSampleSetName) {
@@ -39,6 +43,7 @@ struct LibraryView: View {
               sampleSetStore.localSampleSets.map { $0.name },
               id: \.self) {
                 Text($0)
+                  .foregroundColor(Color("TextLabelColor"))
             }
         }.pickerStyle(.menu)
           .onChange(
@@ -129,7 +134,7 @@ struct LibraryView: View {
       }
     }
     .padding()
-    .background(Color.mint)
+    .background(Color("CanvasLibraryBackgroundColor"))
     .overlay(GeometryReader { metrics in
       ZStack {
         Spacer()
@@ -166,7 +171,7 @@ struct LibrarySlotView: View {
     ZStack {
       GeometryReader { metrics in
         RoundedRectangle(cornerRadius: 10)
-          .foregroundColor(.gray)
+          .foregroundColor(Color("LibrarySlotBackgroundColor"))
           .onAppear {
             Task {
               // We need to wait a beat apparently for the UI to update when coming in from the navigation controller

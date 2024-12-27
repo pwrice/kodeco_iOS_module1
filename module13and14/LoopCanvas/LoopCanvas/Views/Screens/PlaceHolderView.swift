@@ -10,6 +10,7 @@ import SwiftUI
 struct PlaceHolderView: View {
   var body: some View {
     Text("View Not Implemented Yet!")
+      .foregroundColor(Color("TextLabelColor"))
   }
 }
 

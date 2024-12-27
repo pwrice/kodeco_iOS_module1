@@ -147,7 +147,8 @@ class Library: ObservableObject {
     do {
       // Every top level folder is a different category
       let categoryFolders = try fileManager.contentsOfDirectory(atPath: libraryDirectoryURL.path)
-      for (categoryInd, categoryFolderName) in categoryFolders.enumerated() where !categoryFolderName.hasSuffix(".json") {
+      for (categoryInd, categoryFolderName) in categoryFolders.enumerated()
+        where !categoryFolderName.hasSuffix(".json") {
         if categoryInd > maxCategories {
           break
         }
@@ -164,7 +165,8 @@ class Library: ObservableObject {
             color: categoryColor,
             icon: cateogryIcons[sampleInd % cateogryIcons.count],
             loopURL: URL(fileURLWithPath: sampleFile, relativeTo: categoryDirectoryURL),
-            relativePath: sampleSetStore.localSamplesDirectory + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
+            relativePath: sampleSetStore.localSamplesDirectory
+              + "/" + libraryFolderName + "/" + categoryFolderName + "/" + sampleFile,
             isLibraryBlock: true)
           blocks.append(block)
         }
