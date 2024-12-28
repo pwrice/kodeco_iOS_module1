@@ -36,10 +36,11 @@ struct RemoteSampleSetIndex: Codable {
 
 enum RemoteSampleSetIndexLoadingState {
   case notLoaded,
-   loading,
-   loaded,
-   error
+    loading,
+    loaded,
+    error
 }
+
 
 // Index File URL
 // https://loopcanvas.s3.amazonaws.com/Samples/SampleSetIndex.json
@@ -53,10 +54,13 @@ class SampleSetStore: ObservableObject {
   let urlSessionLoader: URLSessionLoading
 
   @Published var remoteSampleSetIndexLoadingState = RemoteSampleSetIndexLoadingState.notLoaded
+  @Published var errorDownloadingSampleSets = false
   @Published var downloadableSampleSets: [DownloadableSampleSet] = []
   @Published var localSampleSets: [LocalSampleSet] = []
 
   var usingMockResults = false
+  var mockErrorState: RemoteSampleSetIndexLoadingState?
+  var mockErrorDownloadingSampleSets: Bool?
 
   let remoteSampleSetS3Path = "https://loopcanvas.s3.amazonaws.com/Samples/"
   let localSamplesDirectory = "Samples/"
@@ -64,11 +68,17 @@ class SampleSetStore: ObservableObject {
     URL(string: remoteSampleSetS3Path)
   }
 
+  private var cancellables = Set<AnyCancellable>()
+
   convenience init () {
     self.init(urlSessionLoader: URLSessionLoader())
   }
 
-  convenience init(withMockResults fileName: String) {
+  convenience init(
+    withMockResults fileName: String,
+    mockErrorState: RemoteSampleSetIndexLoadingState? = nil,
+    mockErrorDownloadingSampleSets: Bool? = nil
+  ) {
     let mockJSONURL = URL(
       fileURLWithPath: fileName,
       relativeTo: Bundle.main.bundleURL)
@@ -83,6 +93,8 @@ class SampleSetStore: ObservableObject {
     loadRemoteSampleSetIndex()
     mockUrlSessionLoader.resolveCompletionHandler()
     usingMockResults = true
+    self.mockErrorState = mockErrorState
+    self.mockErrorDownloadingSampleSets = mockErrorDownloadingSampleSets
   }
 
 
@@ -93,7 +105,14 @@ class SampleSetStore: ObservableObject {
   func loadRemoteSampleSetIndex() {
     if usingMockResults {
       // When using mock results, ignore calls to reload sampleset index
-      remoteSampleSetIndexLoadingState = .loaded
+      if let mockErrorState = mockErrorState {
+        remoteSampleSetIndexLoadingState = mockErrorState
+      } else {
+        remoteSampleSetIndexLoadingState = .loaded
+      }
+      if let mockErrorDownloadingSampleSets = mockErrorDownloadingSampleSets {
+        errorDownloadingSampleSets = mockErrorDownloadingSampleSets
+      }
       return
     }
     guard let baseUrl = baseSampleSetsRemoteURL else {
@@ -148,14 +167,15 @@ class SampleSetStore: ObservableObject {
 
   func removeLocalSampleSet(_ remoteSampleSet: DownloadableSampleSet) {
     remoteSampleSet.removeSampleSetDownload()
-    // Update published LocalSampleSets
     loadLocalSampleSets()
   }
 
   func processRemoteSampleSetIndexResponse(data: Data?, response: URLResponse?, error: Error?) {
     if let data = data, let response = response as? HTTPURLResponse {
       if response.statusCode != 200 {
-        remoteSampleSetIndexLoadingState = .error
+        Task { @MainActor in
+          remoteSampleSetIndexLoadingState = .error
+        }
       }
 
       do {
@@ -166,15 +186,30 @@ class SampleSetStore: ObservableObject {
         Task { @MainActor in
           downloadableSampleSets = sampleSets
           remoteSampleSetIndexLoadingState = .loaded
+          monitorSampleSetLoadingStates()
         }
       } catch let error {
         Self.logger.error("Error decoding RemoteSampleSetIndex response \(String(describing: error))")
-        remoteSampleSetIndexLoadingState = .error
+        Task { @MainActor in
+          remoteSampleSetIndexLoadingState = .error
+        }
       }
     } else {
       Self.logger.error("Contents fetch failed: \(error?.localizedDescription ?? "Unknown error")")
-      remoteSampleSetIndexLoadingState = .error
+      Task { @MainActor in
+        remoteSampleSetIndexLoadingState = .error
+      }
     }
+  }
+
+  private func monitorSampleSetLoadingStates() {
+    let loadingStatePublishers = downloadableSampleSets.map { $0.$loadingState.eraseToAnyPublisher() }
+
+    Publishers.MergeMany(loadingStatePublishers)
+      .sink { [weak self] newState in
+        self?.errorDownloadingSampleSets = newState == .error || (self?.downloadableSampleSets.contains { $0.loadingState == .error } ?? false)
+      }
+      .store(in: &cancellables)
   }
 
   private func augmentRemoteSampleSetsWithDownloadedState(_ sampleSets: [RemoteSampleSet]) -> [DownloadableSampleSet] {
@@ -184,7 +219,9 @@ class SampleSetStore: ObservableObject {
 
     guard let baseSampleSetsRemoteURL = baseSampleSetsRemoteURL else {
       Self.logger.error("Error constructing baseUrl from \(self.remoteSampleSetS3Path)")
-      remoteSampleSetIndexLoadingState = .error
+      Task { @MainActor in
+        remoteSampleSetIndexLoadingState = .error
+      }
       return []
     }
 
@@ -198,8 +235,3 @@ class SampleSetStore: ObservableObject {
     }
   }
 }
-
-
-// Session Loading Utilities
-
-

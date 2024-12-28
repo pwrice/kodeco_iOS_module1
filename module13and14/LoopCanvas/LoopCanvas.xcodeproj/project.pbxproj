@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C10DE20A2D1F38BC00466C0C /* URLSessionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DE2092D1F38BC00466C0C /* URLSessionLoader.swift */; };
 		C10DE20B2D1F38BC00466C0C /* URLSessionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DE2092D1F38BC00466C0C /* URLSessionLoader.swift */; };
+		C10DE20D2D1F3C3900466C0C /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DE20C2D1F3C3100466C0C /* ToastModifier.swift */; };
 		C12C6E872C2AF29500B01C58 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12C6E862C2AF29500B01C58 /* LibraryView.swift */; };
 		C12C6E892C2AF2E200B01C58 /* BlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12C6E882C2AF2E200B01C58 /* BlockView.swift */; };
 		C12C6E8B2C2AF39300B01C58 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12C6E8A2C2AF39300B01C58 /* HomeView.swift */; };
@@ -75,6 +76,7 @@
 
 /* Begin PBXFileReference section */
 		C10DE2092D1F38BC00466C0C /* URLSessionLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionLoader.swift; sourceTree = "<group>"; };
+		C10DE20C2D1F3C3100466C0C /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastModifier.swift; sourceTree = "<group>"; };
 		C12C6E862C2AF29500B01C58 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		C12C6E882C2AF2E200B01C58 /* BlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockView.swift; sourceTree = "<group>"; };
 		C12C6E8A2C2AF39300B01C58 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 		C1E5D1812D1DCD870021D803 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				C10DE20C2D1F3C3100466C0C /* ToastModifier.swift */,
 				C12C6E862C2AF29500B01C58 /* LibraryView.swift */,
 				C12C6E882C2AF2E200B01C58 /* BlockView.swift */,
 			);
@@ -468,6 +471,7 @@
 				C1F5EEA22C133A4900298B00 /* Library.swift in Sources */,
 				C1706DDB2C6CE4E000DAC858 /* SongListView.swift in Sources */,
 				C18D4C022D17816F00595432 /* DownloadableSampleSet.swift in Sources */,
+				C10DE20D2D1F3C3900466C0C /* ToastModifier.swift in Sources */,
 				C1706DDD2C6CE5B700DAC858 /* CanvasStore.swift in Sources */,
 				C18D4C002D17355B00595432 /* FileDownloadManager.swift in Sources */,
 				C1B564C52C0D243E002FDDD4 /* CanvasModel.swift in Sources */,

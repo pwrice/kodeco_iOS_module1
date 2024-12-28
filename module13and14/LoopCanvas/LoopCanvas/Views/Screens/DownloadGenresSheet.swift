@@ -11,6 +11,7 @@ struct DownloadGenresSheet: View {
   let viewModel: CanvasViewModel
   @ObservedObject var store: SampleSetStore
   @Binding var showingDownloadGenresView: Bool
+  @State private var showErrorToast = false
 
   var body: some View {
     NavigationView {
@@ -24,10 +25,11 @@ struct DownloadGenresSheet: View {
           .listStyle(.plain)
         } else if store.remoteSampleSetIndexLoadingState == .error {
           Text("Error connecting to server to load genres.")
+            .padding()
+          Button("Try Again") {
+            store.loadRemoteSampleSetIndex()
+          }
         }
-      }
-      .onAppear {
-        store.loadRemoteSampleSetIndex()
       }
       .navigationBarTitle(Text("Download Genres"), displayMode: .inline)
       .navigationBarItems(
@@ -36,6 +38,15 @@ struct DownloadGenresSheet: View {
         }, label: {
           Text("Done")
         }))
+      .onAppear {
+        store.loadRemoteSampleSetIndex()
+      }
+      .onChange(of: store.errorDownloadingSampleSets) { _, newState in
+        if newState {
+          showErrorToast = true
+        }
+      }
+      .toast(isPresented: $showErrorToast, message: "Failed to download genre. Please try again.")
     }
   }
 }
@@ -90,6 +101,27 @@ struct DownloadGenresSheet_Previews: PreviewProvider {
         showingDownloadGenresView: .constant(true))
       .previewDisplayName("Portrait Mode")
       .previewInterfaceOrientation(.portrait)
+
+      // Network Error (Remote SampleSets)
+      DownloadGenresSheet(
+        viewModel: viewModel,
+        store: SampleSetStore(
+          withMockResults: "Samples/SampleSetIndex.json",
+          mockErrorState: .error),
+        showingDownloadGenresView: .constant(true))
+      .previewDisplayName("Network Error (Remote SampleSets)")
+      .previewInterfaceOrientation(.portrait)
+
+      // Network Error (Downloading SampleSets)
+      DownloadGenresSheet(
+        viewModel: viewModel,
+        store: SampleSetStore(
+          withMockResults: "Samples/SampleSetIndex.json",
+          mockErrorDownloadingSampleSets: true),
+        showingDownloadGenresView: .constant(true))
+      .previewDisplayName("Network Error (Remote SampleSets)")
+      .previewInterfaceOrientation(.portrait)
+
 
       // Portrait Dark Mode
       DownloadGenresSheet(

@@ -6,9 +6,6 @@
 //
 
 import Foundation
-//import os
-//import Combine
-
 
 protocol URLSessionLoading {
   func fetchDataFromURL(urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void)
