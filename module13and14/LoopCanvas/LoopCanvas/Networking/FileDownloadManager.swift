@@ -18,6 +18,8 @@ class FileDownloadManager {
   /// Shared singleton instance for convenience
   static let shared = FileDownloadManager()
 
+  let urlSessionDataLoader: URLSessionProgressDataLoading
+
   /// Custom error types for download manager
   enum DownloadError: Error {
     case invalidURL
@@ -28,7 +30,13 @@ class FileDownloadManager {
   /// Progress object for tracking overall download progress
   private var fileProgresses: [Double] = []
 
-  private init() {}
+  convenience init() {
+    self.init(urlSessionDataLoader: URLSessionProgressDataLoader())
+  }
+
+  init(urlSessionDataLoader: URLSessionProgressDataLoading) {
+    self.urlSessionDataLoader = urlSessionDataLoader
+  }
 
   /// Downloads a list of files asynchronously with individual destination folders and incremental progress tracking.
   /// - Parameters:
@@ -88,34 +96,23 @@ class FileDownloadManager {
     progressHandler: ((Double) -> Void)? = nil
   ) async throws -> (URL, URL) {
     let request = URLRequest(url: url)
-
-    let (asyncBytes, response) = try await URLSession.shared.bytes(for: request)
-    let contentLength = response.expectedContentLength
-    guard let httpResponse = response as? HTTPURLResponse,
-      httpResponse.statusCode == 200,
-      contentLength > 0 else {
-      throw DownloadError.downloadFailed(url: url, reason: "Invalid response or unknown content length")
-    }
-
     let fileName = url.lastPathComponent
     let destinationURL = destinationFolder.appendingPathComponent(fileName)
 
-    var downloadedData = Data()
-    var downloadedBytes: Int64 = 0
-
-    for try await byte in asyncBytes {
-      downloadedData.append(byte)
-      downloadedBytes += 1
-
-      let downloadedPercentage = Double(downloadedBytes) / Double(contentLength)
-
-      if downloadedBytes % 10000 == 0 {
-        Task { @MainActor in
-          self.fileProgresses[downloadIndex] = downloadedPercentage
-          let totalProgress = self.fileProgresses.reduce(0.0) { $0 + $1 } / Double(self.fileProgresses.count)
-          progressHandler?(totalProgress)
-        }
+    let localProgressHandler: ((Double) -> Void) = { progressPct in
+      Task { @MainActor in
+        self.fileProgresses[downloadIndex] = progressPct
+        let totalProgress = self.fileProgresses.reduce(0.0) { $0 + $1 } / Double(self.fileProgresses.count)
+        progressHandler?(totalProgress)
       }
+    }
+
+    let (downloadedData, response) = try await urlSessionDataLoader.data(
+      for: request, progressHandler: localProgressHandler)
+    guard let httpResponse = response as? HTTPURLResponse,
+      httpResponse.statusCode == 200,
+      !downloadedData.isEmpty else {
+      throw DownloadError.downloadFailed(url: url, reason: "Invalid response or unknown content length")
     }
 
     Task { @MainActor in
