@@ -1,5 +1,5 @@
 //
-//  DownloadableSampleSetLoadingState.swift
+//  DownloadableSampleSet.swift
 //  LoopCanvas
 //
 //  Created by Peter Rice on 12/21/24.
@@ -43,32 +43,12 @@ class DownloadableSampleSet: ObservableObject, Identifiable {
     self.baseSampleSetLocalURL = baseSampleSetsLocalURL.appendingPathComponent(remoteSampleSet.name, isDirectory: true)
   }
 
-  func getRemoteAndLocalURLPairs() -> [(URL, URL)] {
-    var urls: [(URL, URL)] = []
-
-    let sampleSetJsonRemoteURL = URL(fileURLWithPath: "SampleSetInfo.json", relativeTo: baseSampleSetRemoteURL)
-    Self.logger.debug("sampleSetJsonRemoteURL \(sampleSetJsonRemoteURL)")
-    let sampleSetJsonLocalURL = baseSampleSetLocalURL
-    Self.logger.debug("sampleSetJsonLocalURL \(sampleSetJsonLocalURL)")
-    urls.append((sampleSetJsonRemoteURL, sampleSetJsonLocalURL))
-
-    for catagory in remoteSampleSet.categories {
-      let categoryLocalUrl = baseSampleSetLocalURL.appendingPathComponent(catagory.name, isDirectory: true)
-      for sample in catagory.loops {
-        let sampleRemoteUrl = URL(fileURLWithPath: sample.url, relativeTo: baseSampleSetRemoteURL)
-        urls.append((sampleRemoteUrl, categoryLocalUrl))
-      }
-    }
-
-    return urls
-  }
-
-  func removeSampleSetDownload() {
+  public func removeSampleSetDownload() {
     deleteLocalSampleSetDirectory()
     loadingState = .notLoaded
   }
 
-  func downloadSampleSet() async {
+  public func downloadSampleSet() async {
     Task { @MainActor in
       loadingState = .loading
       downloadProgress = 0.0
@@ -118,6 +98,26 @@ class DownloadableSampleSet: ObservableObject, Identifiable {
 }
 
 extension DownloadableSampleSet {
+  func getRemoteAndLocalURLPairs() -> [(URL, URL)] {
+    var urls: [(URL, URL)] = []
+
+    let sampleSetJsonRemoteURL = URL(fileURLWithPath: "SampleSetInfo.json", relativeTo: baseSampleSetRemoteURL)
+    Self.logger.debug("sampleSetJsonRemoteURL \(sampleSetJsonRemoteURL)")
+    let sampleSetJsonLocalURL = baseSampleSetLocalURL
+    Self.logger.debug("sampleSetJsonLocalURL \(sampleSetJsonLocalURL)")
+    urls.append((sampleSetJsonRemoteURL, sampleSetJsonLocalURL))
+
+    for catagory in remoteSampleSet.categories {
+      let categoryLocalUrl = baseSampleSetLocalURL.appendingPathComponent(catagory.name, isDirectory: true)
+      for sample in catagory.loops {
+        let sampleRemoteUrl = URL(fileURLWithPath: sample.url, relativeTo: baseSampleSetRemoteURL)
+        urls.append((sampleRemoteUrl, categoryLocalUrl))
+      }
+    }
+
+    return urls
+  }
+
   private func createLocalDirectories(destinationFolders: [URL]) {
     do {
       let fileManager = FileManager.default

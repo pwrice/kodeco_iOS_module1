@@ -16,7 +16,7 @@ class FileDownloadManager {
   )
 
   /// Shared singleton instance for convenience
-  static let shared = FileDownloadManager()
+  static var shared = FileDownloadManager()
 
   let urlSessionDataLoader: URLSessionProgressDataLoading
 

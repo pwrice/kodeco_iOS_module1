@@ -63,10 +63,9 @@ class SampleSetStore: ObservableObject {
   var mockErrorDownloadingSampleSets: Bool?
 
   let remoteSampleSetS3Path = "https://loopcanvas.s3.amazonaws.com/Samples/"
+  var baseSampleSetsRemoteURL: URL?
   let localSamplesDirectory = "Samples/"
-  var baseSampleSetsRemoteURL: URL? {
-    URL(string: remoteSampleSetS3Path)
-  }
+  var baseSampleSetsLocalURL: URL
 
   private var cancellables = Set<AnyCancellable>()
 
@@ -99,6 +98,10 @@ class SampleSetStore: ObservableObject {
 
 
   init (urlSessionLoader: URLSessionLoading) {
+    baseSampleSetsRemoteURL = URL(string: remoteSampleSetS3Path)
+    baseSampleSetsLocalURL = URL(
+      fileURLWithPath: localSamplesDirectory,
+      relativeTo: Bundle.main.bundleURL)
     self.urlSessionLoader = urlSessionLoader
   }
 
@@ -132,13 +135,10 @@ class SampleSetStore: ObservableObject {
 
   func loadLocalSampleSets() {
     let fileManager = FileManager.default
-    let samplesDirectoryURL = URL(
-      fileURLWithPath: localSamplesDirectory,
-      relativeTo: Bundle.main.bundleURL)
     var localSampleSets: [LocalSampleSet] = []
     do {
       let sampleSetFolders = try fileManager.contentsOfDirectory(
-        at: samplesDirectoryURL,
+        at: baseSampleSetsLocalURL,
         includingPropertiesForKeys: nil,
         options: [.skipsHiddenFiles])
       for sampleSetFolderUrl in sampleSetFolders where sampleSetFolderUrl.hasDirectoryPath {
@@ -153,7 +153,7 @@ class SampleSetStore: ObservableObject {
         }
       }
     } catch {
-      Self.logger.error("Error loading sampleSets from samples directory \(samplesDirectoryURL) \(error)")
+      Self.logger.error("Error loading sampleSets from samples directory \(self.baseSampleSetsLocalURL) \(error)")
     }
 
     self.localSampleSets = localSampleSets
@@ -213,12 +213,8 @@ class SampleSetStore: ObservableObject {
   }
 
   private func augmentRemoteSampleSetsWithDownloadedState(_ sampleSets: [RemoteSampleSet]) -> [DownloadableSampleSet] {
-    let samplesDirectoryURL = URL(
-      fileURLWithPath: localSamplesDirectory,
-      relativeTo: Bundle.main.bundleURL)
-
     guard let baseSampleSetsRemoteURL = baseSampleSetsRemoteURL else {
-      Self.logger.error("Error constructing baseUrl from \(self.remoteSampleSetS3Path)")
+      Self.logger.error("Error accessing and baseSampleSetsRemoteURL")
       Task { @MainActor in
         remoteSampleSetIndexLoadingState = .error
       }
@@ -230,7 +226,7 @@ class SampleSetStore: ObservableObject {
         remoteSampleSet: sampleSet,
         loadingState: localSampleSets.contains { $0.name == sampleSet.name } ? .loaded : .notLoaded,
         baseSampleSetsRemoteURL: baseSampleSetsRemoteURL,
-        baseSampleSetsLocalURL: samplesDirectoryURL
+        baseSampleSetsLocalURL: baseSampleSetsLocalURL
       )
     }
   }

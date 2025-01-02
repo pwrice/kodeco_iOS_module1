@@ -34,11 +34,11 @@ class URLSessionProgressDataLoader: URLSessionProgressDataLoading {
 
 
 class MockURLSessionProgressDataLoader: URLSessionProgressDataLoading {
-  var urlToDataMap: [URL: Data]
+  var urlToDataMap: [String: Data]
   var mockResponse: URLResponse
   var simulateError: Error?
 
-  init(urlToDataMap: [URL: Data], mockResponse: URLResponse, simulateError: Error? = nil) {
+  init(urlToDataMap: [String: Data], mockResponse: URLResponse, simulateError: Error? = nil) {
     self.urlToDataMap = urlToDataMap
     self.mockResponse = mockResponse
     self.simulateError = simulateError
@@ -49,8 +49,8 @@ class MockURLSessionProgressDataLoader: URLSessionProgressDataLoading {
         throw error
     }
 
-    guard let url = request.url,
-      let data = urlToDataMap[url] else {
+    guard let urlString = request.url?.absoluteString,
+      let data = urlToDataMap[urlString] else {
       throw URLError(.fileDoesNotExist)
     }
 
@@ -64,42 +64,3 @@ class MockURLSessionProgressDataLoader: URLSessionProgressDataLoading {
     return (data, self.mockResponse)
   }
 }
-
-/*
-class MockLocalFilesURLSessionProgressDataLoader: URLSessionProgressDataLoading {
-  // Dictionary to map URLs to local file paths
-  private var urlToFileMap: [URL: String]
-
-  init(urlToFileMap: [URL: String]) {
-    self.urlToFileMap = urlToFileMap
-  }
-
-  func data(for request: URLRequest, progressHandler: ((Double) -> Void)) async throws -> (Data, URLResponse) {
-    guard let url = request.url,
-          let filePath = urlToFileMap[url] else {
-      throw URLError(.fileDoesNotExist)
-    }
-    let fileURL = URL(fileURLWithPath: filePath)
-    let fileHandle = try FileHandle(forReadingFrom: fileURL)
-
-    // Create an AsyncBytes sequence from the file handle
-    let asyncBytes = fileHandle.bytes
-
-    let response = HTTPURLResponse(
-      url: url,
-      statusCode: 200,
-      httpVersion: "HTTP/1.1",
-      headerFields: nil
-    )!
-
-    var downloadedData = Data()
-    for try await byte in asyncBytes {
-      downloadedData.append(byte)
-    }
-    progressHandler(0.5)
-    progressHandler(1.0)
-
-    return (downloadedData, response)
-  }
-}
-*/

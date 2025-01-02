@@ -33,7 +33,7 @@ class FileDownloadManagerTests: XCTestCase {
     }
 
     mockLoader = MockURLSessionProgressDataLoader(
-      urlToDataMap: [fileURL: mockData],
+      urlToDataMap: [fileURL.absoluteString: mockData],
       mockResponse: mockResponse
     )
 
